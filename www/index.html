@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <script src="http://dev.jspm.io/require.js"></script>
+  <script>
+    require(['zest', 'gorilla/titlebar-blueios', 'gorilla/button'], function($z, TitlebarBlue, Button) { 
+      window.$z = $z;
+  
+      var firstPage = {
+        title: 'Home Page', 
+        left: {
+          render: Button,
+          options: {
+            text: 'Options'
+          }
+        },
+        right: {
+          render: Button,
+          options: {
+            mode: 'next',
+            text: 'Next Page',
+            click: function() {
+              $z.select('.titlebar').slideLeft(nextPage);
+            }
+          }
+        }
+      };
+
+      var nextPage = {
+        title: 'Next Page', 
+        left: {
+          render: Button,
+          options: {
+            mode: 'prev',
+            text: 'Previous Page',
+            click: function() {
+              $z.select('.titlebar').slideRight(firstPage);
+            }
+          }
+        }
+      };
+
+      $z.render(TitlebarBlue, firstPage, document.body);
+    });
+  </script>
