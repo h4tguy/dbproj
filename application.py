@@ -1,11 +1,12 @@
 #Put your flask here
 from flask import Flask, session, redirect
+from authentication import requires_auth
 
 app=Flask(__name__)
 
 @app.route('/')
 def index():
-	pass
+    return "hello world"
 
 @app.route('/login')
 def login():
@@ -16,6 +17,7 @@ def answer_question():
 	pass
 
 @app.route('/rate_question')
+@requires_auth
 def rate_question():
 	pass
 
@@ -44,3 +46,6 @@ def make_test():
 	pass
 
 app.secret_key=' \xfe#\x9eO\xd1,\xd3\xb14\xfe\xca\x12\xee\xb1\x89\xd9\xf4\xa1[\x0e\xcb\x0f\xe8'
+
+if __name__ == "__main__":
+        app.run()
