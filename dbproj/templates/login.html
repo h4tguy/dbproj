@@ -45,6 +45,30 @@
 
     <script src="js/app.js"></script>
 
+    <script>
+    
+      $(document).ready(function() {
+ 
+        /* When the user clicks the login button we need to has
+           the password and send it to the server for verification */
+        $("login-button").click(function(e) {
+ 
+          var user = $('#studentno').value,
+              pass = $('#password').value,
+              pass_hash = CryptoJS.MD5(pass);
+ 
+          e.preventDefault();
+ 
+          $.post("some_url", {
+            username: user,
+            password: hash
+          });
+ 
+        });
+      });
+ 
+    </script>
+
     
   </body>
 </html>
