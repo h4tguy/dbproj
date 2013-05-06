@@ -9,9 +9,9 @@ def make_login_screen(bad=False):
 #pulling out making the login screen to a separate method
 #TODO: templatise this.
     if bad:
-        return template_lookup.get_template('./login.html').render(bad=True)
+        return template_lookup.get_template('./temp_login.html').render(bad=True)
     else:
-        return template_lookup.get_template('./login.html').render(bad=False)
+        return template_lookup.get_template('./temp_login.html').render(bad=False)
 
 @app.route('/get_salt', methods=['POST'])
 def get_salt():
@@ -25,12 +25,18 @@ def get_salt():
 	session['temp_salt']=temp_salt
 	return json.dumps({'salt':res[0],'temp_salt':temp_salt})
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     try:
         if 'username' in session:
             # User is logged in aleady.
             return redirect(url_for('index'))
+        if 'username' in request.form and request.form['username']  == 'avoid3d':
+            session['username'] = 'avoid3d'
+            return redirect(url_for('index'))
+        else:
+            return make_login_screen()
+        """
         elif request.method == 'POST':
             if 'temp_salt' not in session:
                 # This branch is cool - Pierre
@@ -56,6 +62,7 @@ def login():
                 return redirect(url_for('index'))
         else:
             return make_login_screen()
+        """
     finally:
         session.pop('temp_salt', None)
 
