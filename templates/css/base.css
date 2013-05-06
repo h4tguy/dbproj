@@ -237,7 +237,7 @@ label[for='toggle-all'] {
   position: relative;
 }
 
-#todo-list li label, #todo-list li input {
+#todo-list li label, #todo-list li input.plain {
   word-break: break-word;
   padding: 15px;
   margin-left: 45px;
@@ -249,11 +249,7 @@ label[for='toggle-all'] {
   -o-transition: color 0.4s;
   transition: color 0.4s;
 }
-#todo-list li input {
-  border: 0;
-  width: auto;
-  box-sizing: border-box;
-}
+
 
 #todo-list li.completed label {
   color: #a9a9a9;

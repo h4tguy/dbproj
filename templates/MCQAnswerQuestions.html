@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/app.css">
   </head>
 
-  <body id="login">
+  <body id="full">
 
     <section id="logo">
       <img src="img/logo-icon.png" />
@@ -21,20 +21,32 @@
         <ul id="todo-list">
           <li>
             <div class="view">
-              <input class="plain" placeholder="Student number">
+              <label>Which of the following is not a property of a DBMS?</label>
             </div>
           </li>
           <li>
-            <div class="view">
-              <input class="plain" type="password" placeholder="Password">
+            <div class="view mcq A">
+              <input class="toggle" type="radio" name="question">
+              <label>Data is persistent</label>
+            </div>
+            <div class="view mcq B">
+              <input class="toggle" type="radio" name="question">
+              <label>Provides complex abstractions</label>
+            </div>
+            <div class="view mcq C">
+              <input class="toggle" type="radio" name="question">
+              <label>Integrity of data is maintained</label>
+            </div>
+            <div class="view mcq D">
+              <input class="toggle" type="radio" name="question">
+              <label>Relational DBMS's are all very similar</label>
             </div>
           </li>
         </ul>
       </section>
 
       <footer id="footer">                        
-        <button id="register-button">Register</button>
-        <button id="login-button">Log in</button>
+        <button id="login-button">Next Question >></button>
       </footer>
 
     </section>
