@@ -1,0 +1,33 @@
+#login {
+  width: 540px;
+}
+#login #logo {
+  margin-top: 20px;
+  text-align: center;
+  min-height: 335px;
+}
+#login #todoapp {
+  margin-top: 20px;
+}
+#register-button {
+  float: left;
+}
+#login-button, #register-button {
+  color: #FFF;
+  background: #8d7d77;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(132, 110, 100, 0.8)),to(rgba(101, 84, 76, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -moz-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -o-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -ms-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#9d8b83', EndColorStr='#847670');
+}
+#login-button:hover, #register-button:hover {
+  background: #8d7d77;
+  color: #CCC;
+}
+
+#todo-list input {
+
+}
