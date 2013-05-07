@@ -11,7 +11,11 @@ Answers (Regnum, Qno, Answer)
 Ratings (Qno, Regnum, Points, Reason)
 
 I don't think the derived relations should be stored since they would have to be recalculated anyway (I would make
- a temporary relation and drop it again :p)
+ a temporary relation and drop it again :p). Nevertheless you can work with these as if they exist (I'll figure out
+ how to make them).
+
+Results (Regnum, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating)
+QuestionDifficulty (Qno, Difficulty)
 
 
 Necessary:
