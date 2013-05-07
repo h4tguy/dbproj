@@ -8,10 +8,7 @@ from dbproj import template_lookup
 def make_login_screen(bad=False):
 #pulling out making the login screen to a separate method
 #TODO: templatise this.
-    if bad:
-        return template_lookup.get_template('./temp_login.html').render(bad=True)
-    else:
-        return template_lookup.get_template('./temp_login.html').render(bad=False)
+    return template_lookup.get_template('./temp_login.html').render(bad=bad)
 
 @app.route('/get_salt', methods=['POST'])
 def get_salt():
