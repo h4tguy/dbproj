@@ -48,6 +48,7 @@ def login():
                 abort(500) # there should always be one match since the clinet can't change the username since previous access
             hsh, use_type=res
             hasher=md5.new() # should we make new hashers a lot? entropy wise
+			#what do you mean entropy-wise? I see no problem with it
             hasher.update(hsh+temp_salt)
             if(hasher.digest() != request.form['hash']):
                 return make_login_screen(True)
