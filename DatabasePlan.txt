@@ -2,13 +2,16 @@ Database Implementation
 
 Summary:
 --------
-For now, I think it would be reasonable to presume the following relations:
+For now, presume the following relations:
 
 Users (Regnum, Salt, HashedPassword, UserType)
 Questions (Qno, Question, RightAnswer, SetBy, Useless)
 	- MCQuestions (Qno, A, B, C, D)
 Answers (Regnum, Qno, Answer)
 Ratings (Qno, Regnum, Points, Reason)
+
+I don't think the derived relations should be stored since they would have to be recalculated anyway (I would make
+ a temporary relation and drop it again :p)
 
 
 Necessary:
