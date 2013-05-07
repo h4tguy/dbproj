@@ -1,27 +1,40 @@
 Database Implementation
 
+Summary:
+--------
+For now, I think it would be reasonable to presume the following relations:
+
+Users (Regnum, Salt, HashedPassword, UserType)
+Questions (Qno, Question, RightAnswer, SetBy, Useless)
+	- MCQuestions (Qno, A, B, C, D)
+Answers (Regnum, Qno, Answer)
+Ratings (Qno, Regnum, Points, Reason)
+
+
 Necessary:
 ----------
 
 Users (Regnum, Salt, HashedPassword, UserType):
-	List of all users and details. Regnum is the user's unique identifier, salt is used as a security measure when hashing,
-	the password stored has been hashed, and the UserType determines what privileges the user has (Student or Teacher)
+	List of all users and details. Regnum is the user's unique identifier, salt is used as a security measure when 
+	hashing, the password stored has been hashed, and the UserType determines what privileges the user has 
+	(Student or Teacher)
 
 Questions:
-	-Either a separate table for WordQuestions (Qno, Question, RightAnswer, SetBy, Useless) and MCQuestions (Qno, Question,
-	RightAnswer, SetBy, A, B, C, D, Useless) with no generalised Questions table; Useless (True/False) is necessary as one
-	thing the programme should do is allow staff to flag weak/poorly asked questions.
+	-Either a separate table for WordQuestions (Qno, Question, RightAnswer, SetBy, Useless) and MCQuestions (Qno, 
+	Question, RightAnswer, SetBy, A, B, C, D, Useless) with no generalised Questions table; Useless (True/False) 
+	is necessary as one thing the programme should do is allow staff to flag weak/poorly asked questions.
 
-	-Or a Questions (Qno, Question, RightAnswer, SetBy, Useless) table and a MCQuestions (Qno,A, B, C,D) table that
-	specialises some Questions. There is no need for WordQuestions to be specialised.
+	-Or a Questions (Qno, Question, RightAnswer, SetBy, Useless) table and a MCQuestions (Qno,A, B, C,D) table 
+	that specialises some Questions. There is no need for WordQuestions to be specialised.
 
 Answers (Regnum, Qno, Answer):
-	A table for Answers that records who answered which question with what answer - assumes that no one may answer the same
-	question twice
+	A table for Answers that records who answered which question with what answer - assumes that no one may answer 
+	the same question twice
 
 Ratings (Qno, Regnum, Points, Reason):
-	A table to store how questions were rated by people. There should be a score from 1 to 5 (points) as well as a reason for
-	the rating given. The rater?s Regnum is also stored ? should be able to safely assume no one rates the same question twice.
+	A table to store how questions were rated by people. There should be a score from 1 to 5 (points) as well as a 
+	reason for the rating given. The rater?s Regnum is also stored ? should be able to safely assume no one rates 
+	the same question twice.
 
 
 
@@ -29,10 +42,11 @@ Derived Relations that will be needed for queries:
 --------------------------------------------------
 
 Results (Regnum, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating):
-	As this table is derived from the answers and ratings tables, it isn't necessary. We do need to be able to make a class list
-	showing results, however, so it would be useful at least as a temporary construct.
+	As this table is derived from the answers and ratings tables, it isn't necessary. We do need to be able to make 
+	a class list showing results, however, so it would be useful at least as a temporary construct.
 
 QuestionDifficulty (Qno, Difficulty):
-	Another derived table where the difficulty of a question is some function of the proportion of people who got it correct and
-	how it was rated. Difficulty can be any of {Easy, Average, Hard, Unusable}. We need to be able to generate a report of every
-	question in the database along with its difficulty. We also need to be able to make a test of questions with varying difficulty.
+	Another derived table where the difficulty of a question is some function of the proportion of people who got 
+	it correct and how it was rated. Difficulty can be any of {Easy, Average, Hard, Unusable}. We need to be able 
+	to generate a report of every question in the database along with its difficulty. We also need to be able to 
+	make a test of questions with varying difficulty.
