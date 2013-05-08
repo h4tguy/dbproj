@@ -1,0 +1,9 @@
+{
+  "name": "selector-0.0.1",
+  "version": "0.0.0",
+  "commit": "73eaed773f59f471afad4748b8ce3ffb63a4d165",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/guybedford/selector.git"
+  }
+}

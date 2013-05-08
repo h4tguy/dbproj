@@ -1,0 +1,19 @@
+{
+  "name": "zest-0.0.2",
+  "version": "0.0.1",
+  "main": "zest.js",
+  "dependencies": {
+    "json": "guybedford/json#~0.0.1",
+    "css": "guybedford/require-css#~0",
+    "zoe": "zestjs/zoe#0.0.1"
+  },
+  "gitHead": "77cbaf6c9c88afc38cc46d99a375eca94001d749",
+  "readme": "Zest JS Client Framework\n===\n\nFor install instructions read the documentation at http://zestjs.org.",
+  "readmeFilename": "readme.md",
+  "_id": "zest@0.0.1",
+  "description": "Zest JS Client Framework ===",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zestjs/zest.git"
+  }
+}

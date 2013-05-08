@@ -1,0 +1,14 @@
+{
+  "name": "zoe-0.0.1",
+  "version": "0.0.1",
+  "main": "./zoe.js",
+  "gitHead": "8c680fce27308ed347d5c82a54ac819dda2de191",
+  "readme": "zoe.js\n======\n\nNatural JavaScript inheritance.\n\nSee http://zoejs.org for introduction and documentation.\n\nRuns in NodeJS, AMD and as a browser global.\n\nInstall\n---\n\n### Volo for AMD\n```\n  volo add zestjs/zoe\n```\n\n### NPM\n```\n  npm install zoe\n```\n\n### Download\n\nSimply download zoe.min.js into the required location and require with a loader or script tag.\n\nLicense\n---\n\nMIT\n",
+  "readmeFilename": "README.md",
+  "_id": "zoe@0.0.1",
+  "description": "zoe.js ======",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zestjs/zoe.git"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "json-0.0.1",
+  "version": "0.0.1",
+  "dependencies": {
+    "is": "guybedford/require-is#0.0.1"
+  },
+  "gitHead": "25f98ab7a36834a610679378a3518d5eb1992b1d",
+  "readme": "Parse JSON\n==========\n\nAMD module to detect JSON.parse support and if not provided, loads json2 dynamically.\n\nDependent on Require-IS and the json2 library by Douglas Crockford.\n\nBy default json2 excluded from builds and loaded dynamically when needed.\n\nUsage:\n\n```javascript\n\n  require(['json/json'], function(JSON) {\n    var obj = JSON.parse('{ json: \"object\" }'); \n  });\n \n```\n\nInstallation:\n\nWith Volo:\n\n```\n  volo add guybedford/json\n```\n\nWithout Volo, download this repo to a folder called json in the global lib folder.\n\nThen install [require-is](/guybedford/require-is) and download [json2](https://raw.github.com/douglascrockford/JSON-js/master/json2.js) into the lib folder.\n",
+  "readmeFilename": "README.md",
+  "_id": "json@0.0.1",
+  "description": "Parse JSON ==========",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/guybedford/json.git"
+  }
+}
