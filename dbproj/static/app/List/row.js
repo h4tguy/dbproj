@@ -4,16 +4,16 @@ define(['zest', 'css!./row'], function($z) {
 
     options: {
       inputType: 'input',
-      label: 'Default label',
+      text: 'Default label',
     },
 
     render: function(o) {
       var tpl  = ['<li>',
                   '<div class="view">',
                   '<input class="toggle" type="checkbox" checked>',
-                  '<label>' + o.label + '</label>',
+                  '<label>' + o.text + '</label>',
                   '</div>',
-                  '<input class="edit" value="' + o.label + '">',
+                  '<input class="edit" value="' + o.text + '">',
                   '</li>'];
 
       return tpl.join(' ');

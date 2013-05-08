@@ -3,8 +3,8 @@ define(['zest', 'jquery', '~/app/Logo/logo', '~/app/List/list-login', '~/app/But
   return $z.create([$z.Component], {
 
     options: {
-      title: 'Default site title',
-      id: 'frame'
+      id: 'frame',
+      menu: ['Log In', 'Answer Questions']
     },
 
     LogoRegion: Logo,
@@ -26,14 +26,15 @@ define(['zest', 'jquery', '~/app/Logo/logo', '~/app/List/list-login', '~/app/But
 
     render: function(o) {
       var page  = '<section>{`LogoRegion`}';  
-          page += '<section id="main" class="loading narrow"><header id="header"></header>';
-          page += '{`ListRegion`}';
+          page += '<section id="main" class="narrow loading"><header id="header"></header>';
+          page += '<div id="list-container">{`ListRegion`}</div>';
           page += '<footer id="footer">{`ButtonsRegion`}</footer></section>';
           page += '<footer id="info"><p>Log in or register to begin.</p><p>CSC2001F Assignment 7</p></footer></section>';
           
       return page;
     },
 
+    pipe: true,
     attach: './page-attach'
 
   });

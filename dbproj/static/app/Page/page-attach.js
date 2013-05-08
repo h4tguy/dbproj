@@ -2,21 +2,39 @@ define(['zest', 'jquery'], function($z) {
 
   return $z.create([$z.Constructor, $z.InstanceEvents], {
 
-    _events: ['logIn', 'post', 'generate_hash', 'status_handler'],
+    _events: ['logIn'],
 
     construct: function(el, o) {
 
       // Set references to Zest components
-      this.login_btn = $z.select('.login-btn', el);
+      this.$main = $('#main', el);
+      this.list = $z.select('#main-list', el);
       this.studentno_input = $z.select('.studentno-input', el);
       this.password_input = $z.select('.password-input', el);
+      this.login_btn = $z.select('.login-btn', el);
 
       // Set event functions
       this.login_btn.click.on(this.logIn);
 
+      this.init();
+
     },
 
     prototype: {
+
+      init: function() {
+        this.unsetLoading();
+      },
+
+      setLoading: function() {
+        this.$main.css('height', this.$main.outerHeight() );
+        this.$main.addClass('loading');
+      },
+
+      unsetLoading: function() {
+        this.$main.removeAttr('style');
+        this.$main.removeClass('loading');
+      },
 
       /** 
        * Process to log in and authenticate a user
@@ -104,14 +122,30 @@ define(['zest', 'jquery'], function($z) {
        * Function which handles what happens when we get our authentication status back
        * @param data, the {authentication: true/false} json object
        **/
-      handle_authentication_status: function(data) {
-        console.log('logged in');
-        console.log(data);
+      handle_authentication_status: function(authentication) {
+
+        if(authentication.status == 'true') {
+          var self = this;
+          this.setLoading();
+          $.when( this.list.clearList() ).done(function() {
+            self.displayMenu();
+          });
+        }
       },
 
-      dispose: function() {
-        this.$button.unbind();
-      }
+      /**
+       * PAGE DISPLAYS
+       */
+
+      displayMenu: function(o) {
+        var self = this;
+        $z.render('Draw the main menu or something else', document.querySelector('#list-container'), function() {
+          console.log('menu displayed');
+          self.unsetLoading();  
+        });
+      },
+
+      dispose: function() {}
 
     }
 

@@ -31,6 +31,10 @@ body {
         0 25px 50px 0 rgba(0, 0, 0, 0.15);
 }
 
+#main.loading {
+  background: url('ajax-loader.gif') no-repeat 50% 50% #fff;
+}
+
 #header {
   padding-top: 15px;
   border-radius: inherit;

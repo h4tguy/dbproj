@@ -26,6 +26,9 @@ define(['zest', './row-input', 'css!./list'], function($z, RowInput) {
       return '<ul>{`ListRows`}</ul>';
     },
 
+    pipe: true,
+    attach: './list-attach'
+
   });
 
 });
