@@ -12,6 +12,7 @@ def make_login_screen(bad=False):
 
 @app.route('/get_salt', methods=['POST'])
 def get_salt():
+	global cur
 	tmp = json.loads(request.form['json'])
 	cur.execute("select salt from users where username=?", (tmp['username'],))
 	res = cur.fetchone()

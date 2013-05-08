@@ -12,14 +12,24 @@ template_lookup = TemplateLookup(directories=['./dbproj/templates'])
 # This is here so that app is defined
 
 from authentication import get_salt, requires_auth
+from answer_q import *
 
 @app.route('/')
 def index():
     return "hello world"
 
+@app.route('/get_question')
+def get_question():
+	#session['curr_q']=get_q(session['username'])
+	session['curr_q']=Question()
+	session['curr_q'].body="This is a question"
+	session['curr_q'].ans='ans'
+	return json.dumps({'question':session['curr_q'].body})
+
 @app.route('/answer_question')
 def answer_question():
-	pass
+	their_ans=json.loads(request.data)['answer']
+	return json.dumps({'correct':their_ans.strip()==session['curr_q'].ans.strip()})
 
 @app.route('/rate_question')
 @requires_auth
