@@ -1,16 +1,27 @@
 <!doctype html>
 <html>
-  <script src="http://dev.jspm.io/require.js"></script>
-  <script>
-    require(['zest', './components/line'], function($z, Line) { 
-      window.$z = $z;
-  
-      var loginPage = {
-        title: 'Log in or Register', 
-                
-      };      
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>[Title goes here]</title>
 
-      $z.render(Line, document.body);
+  <script src="lib/require.js"></script>
+  <script src="config.js"></script>
+
+  <script>
+    require(['zest', '~/app/Page/page'], function($z, Page) {
+
+      var mainPage = {
+        options: {
+          title: 'TITLE HERE YAY!',
+          rowData: ['Student number', 'Password'],
+        },
+        render: Page
+      };
+      
+      $z.render(mainPage, document.body);
     });
   </script>
+</head>
+<body></body>
 </html>
