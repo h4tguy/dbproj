@@ -1,13 +1,10 @@
 #Put your flask here
-from flask import Flask, session, redirect,abort
+from flask import Flask, session, redirect,abort, render_template
 import os
 import json
 import md5
-from mako.template import Template
-from mako.lookup import TemplateLookup
 
 app = Flask(__name__)
-template_lookup = TemplateLookup(directories=['./dbproj/templates'])
 
 # This is here so that app is defined
 
@@ -16,7 +13,7 @@ from answer_q import *
 
 @app.route('/')
 def index():
-    return "hello world"
+    return render_template('index.html')
 
 @app.route('/get_question')
 def get_question():

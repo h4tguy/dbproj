@@ -7,7 +7,7 @@ define(['zest', 'css!./logo'], function($z) {
     },
 
     render: function(o) {
-      return '<section><img src="app/Logo/logo-icon.png" width="330" height="330" /></section>';
+      return '<section><img src="/static/app/Logo/logo-icon.png" width="330" height="330" /></section>';
     },
 
   });

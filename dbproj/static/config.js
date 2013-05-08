@@ -1,8 +1,8 @@
 requirejs.config({
-  "baseUrl": "lib",
+  "baseUrl": "../static/lib",
   "paths": {
-    "~": "../",
-    "app": "../"
+    "~": "..",
+    "app": ".."
   },
   "map": {
     "*": {

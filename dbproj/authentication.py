@@ -3,12 +3,12 @@ from functools import wraps
 from flask import  request, Response, session, redirect, url_for
 
 from dbproj import app
-from dbproj import template_lookup
 
-def make_login_screen(bad=False):
+# not sure if this is necessary anymore, just commenting out for now, sorry - Jarred
+#def make_login_screen(bad=False):
 #pulling out making the login screen to a separate method
 #TODO: templatise this.
-    return template_lookup.get_template('./temp_login.html').render(bad=bad)
+    #return template_lookup.get_template('./temp_login.html').render(bad=bad)
 
 @app.route('/get_salt', methods=['POST'])
 def get_salt():
@@ -33,7 +33,9 @@ def login():
             session['username'] = 'avoid3d'
             return redirect(url_for('index'))
         else:
-            return make_login_screen()
+            # adjusting this too, sorry once again, just trying to test without the templating - Jarred
+            #return make_login_screen()
+            return redirect(url_for('index'))
         """
         elif request.method == 'POST':
             if 'temp_salt' not in session:
