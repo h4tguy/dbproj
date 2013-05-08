@@ -1,4 +1,5 @@
 Database Implementation
+(SQL below)
 
 Summary:
 --------
@@ -57,3 +58,48 @@ QuestionDifficulty (Qno, Difficulty):
 	it correct and how it was rated. Difficulty can be any of {Easy, Average, Hard, Unusable}. We need to be able 
 	to generate a report of every question in the database along with its difficulty. We also need to be able to 
 	make a test of questions with varying difficulty.
+
+
+PSQL to create the tables:
+--------------------------
+
+CREATE TABLE Users (
+	Regnum VARCHAR(9) PRIMARY KEY,
+	FullName VARCHAR(50) NOT NULL,
+	Salt VARCHAR (20) NOT NULL,
+	HashedPassword VARCHAR(40),
+	UserType VARCHAR(7) NOT NULL
+);
+
+CREATE TABLE Questions (
+	Qno INTEGER PRIMARY KEY,
+	Question VARCHAR(100) NOT NULL,
+	RightAnswer VARCHAR(20) NOT NULL,
+	SetBy VARCHAR(9) NOT NULL,
+	Useless BOOLEAN
+);
+
+CREATE TABLE MCQuestions (
+	Qno INTEGER PRIMARY KEY REFERENCES Questions (Qno),
+	A VARCHAR(20) NOT NULL,
+	B VARCHAR(20) NOT NULL,
+	C VARCHAR(20) NOT NULL,
+	D VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Answers (
+	Regnum VARCHAR(9) REFERENCES Users (Regnum),
+	Qno INTEGER REFERENCES Questions (Qno),
+	Answer VARCHAR(20),
+
+	PRIMARY KEY( Regnum, Qno )
+);
+
+CREATE TABLE Ratings (
+	Qno INTEGER REFERENCES Questions (Qno),
+	Regnum VARCHAR(9) REFERENCES Users (Regnum),
+	Points INTEGER,
+	Reason VARCHAR(50),
+
+	PRIMARY KEY( Qno, Regnum )
+);
