@@ -4,7 +4,7 @@ Summary:
 --------
 For now, presume the following relations:
 
-Users (Regnum, Salt, HashedPassword, UserType)
+Users (Regnum, FullName, Salt, HashedPassword, UserType)
 Questions (Qno, Question, RightAnswer, SetBy, Useless)
 	- MCQuestions (Qno, A, B, C, D)
 Answers (Regnum, Qno, Answer)
@@ -14,7 +14,7 @@ I don't think the derived relations should be stored since they would have to be
  a temporary relation and drop it again :p). Nevertheless you can work with these as if they exist (I'll figure out
  how to make them).
 
-Results (Regnum, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating)
+Results (Regnum, FullName, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating)
 QuestionDifficulty (Qno, Difficulty)
 
 
@@ -24,7 +24,7 @@ Necessary:
 Users (Regnum, Salt, HashedPassword, UserType):
 	List of all users and details. Regnum is the user's unique identifier, salt is used as a security measure when 
 	hashing, the password stored has been hashed, and the UserType determines what privileges the user has 
-	(Student or Teacher)
+	(Student or Teacher). FullName is necessary for when reporting students' results.
 
 Questions:
 	-Either a separate table for WordQuestions (Qno, Question, RightAnswer, SetBy, Useless) and MCQuestions (Qno, 
@@ -48,7 +48,7 @@ Ratings (Qno, Regnum, Points, Reason):
 Derived Relations that will be needed for queries:
 --------------------------------------------------
 
-Results (Regnum, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating):
+Results (Regnum, FullName, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating):
 	As this table is derived from the answers and ratings tables, it isn't necessary. We do need to be able to make 
 	a class list showing results, however, so it would be useful at least as a temporary construct.
 
