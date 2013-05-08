@@ -1,22 +1,22 @@
 Database Implementation
-(SQL below)
+(PSQL below)
 
 Summary:
 --------
-For now, presume the following relations:
+
+Relations:
 
 Users (Regnum, FullName, Salt, HashedPassword, UserType)
 Questions (Qno, Question, RightAnswer, SetBy, Useless)
-	- MCQuestions (Qno, A, B, C, D)
+MCQAns (Qno, Letter, Answer)
 Answers (Regnum, Qno, Answer)
 Ratings (Qno, Regnum, Points, Reason)
 
-I don't think the derived relations should be stored since they would have to be recalculated anyway (I would make
- a temporary relation and drop it again :p). Nevertheless you can work with these as if they exist (I'll figure out
- how to make them).
+Useful Derived Relations:
 
-Results (Regnum, FullName, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating)
 QuestionDifficulty (Qno, Difficulty)
+Results (Regnum, FullName, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating)
+
 
 
 Necessary:
@@ -28,12 +28,9 @@ Users (Regnum, Salt, HashedPassword, UserType):
 	(Student or Teacher). FullName is necessary for when reporting students' results.
 
 Questions:
-	-Either a separate table for WordQuestions (Qno, Question, RightAnswer, SetBy, Useless) and MCQuestions (Qno, 
-	Question, RightAnswer, SetBy, A, B, C, D, Useless) with no generalised Questions table; Useless (True/False) 
-	is necessary as one thing the programme should do is allow staff to flag weak/poorly asked questions.
-
-	-Or a Questions (Qno, Question, RightAnswer, SetBy, Useless) table and a MCQuestions (Qno,A, B, C,D) table 
-	that specialises some Questions. There is no need for WordQuestions to be specialised.
+	All Questions, MCQ or one-word answer, are stored in Questions (Qno, Question, RightAnswer, SetBy, Useless). In
+	addition, the answers to all the MCQs are stored in MCQAns (Qno, Letter, Answer), where Letter will in general 
+	be one of 'A','B','C' or 'D' but any MCQ is not restricted to having exactly 4 answers.
 
 Answers (Regnum, Qno, Answer):
 	A table for Answers that records who answered which question with what answer - assumes that no one may answer 
@@ -79,12 +76,12 @@ CREATE TABLE Questions (
 	Useless BOOLEAN
 );
 
-CREATE TABLE MCQuestions (
-	Qno INTEGER PRIMARY KEY REFERENCES Questions (Qno),
-	A VARCHAR(20) NOT NULL,
-	B VARCHAR(20) NOT NULL,
-	C VARCHAR(20) NOT NULL,
-	D VARCHAR(20) NOT NULL
+CREATE TABLE MCQans (
+	Qno INTEGER REFERENCES Questions (Qno),
+	Letter VARCHAR(1) NOT NULL,
+	Answer VARCHAR(20) NOT NULL,
+	
+	PRIMARY KEY( Qno, Letter )
 );
 
 CREATE TABLE Answers (
@@ -102,4 +99,9 @@ CREATE TABLE Ratings (
 	Reason VARCHAR(50),
 
 	PRIMARY KEY( Qno, Regnum )
+);
+
+CREATE TABLE QuestionDifficulty (
+	Qno INTEGER PRIMARY KEY REFERENCES Questions (Qno),
+	Difficulty VARCHAR(8)
 );
