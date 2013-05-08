@@ -18,9 +18,18 @@ from answer_q import *
 def index():
     return "hello world"
 
+@app.route('/get_question')
+def get_question():
+	#session['curr_q']=get_q(session['username'])
+	session['curr_q']=Question()
+	session['curr_q'].body="This is a question"
+	session['curr_q'].ans='ans'
+	return json.dumps({'question':session['curr_q'].body})
+
 @app.route('/answer_question')
 def answer_question():
-	pass
+	their_ans=json.loads(request.body)['answer']
+	return json.dumps({'correct':their_ans.strip()==session['curr_q'].ans.strip()})
 
 @app.route('/rate_question')
 @requires_auth
