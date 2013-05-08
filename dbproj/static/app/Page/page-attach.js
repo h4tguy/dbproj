@@ -14,7 +14,6 @@ define(['zest', 'jquery'], function($z) {
       // Set event functions
       this.login_btn.click.on(this.logIn);
 
-
     },
 
     prototype: {
