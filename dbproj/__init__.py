@@ -12,6 +12,7 @@ template_lookup = TemplateLookup(directories=['./dbproj/templates'])
 # This is here so that app is defined
 
 from authentication import get_salt, requires_auth
+from answer_q import *
 
 @app.route('/')
 def index():
