@@ -28,7 +28,7 @@ def get_question():
 
 @app.route('/answer_question')
 def answer_question():
-	their_ans=json.loads(request.body)['answer']
+	their_ans=json.loads(request.data)['answer']
 	return json.dumps({'correct':their_ans.strip()==session['curr_q'].ans.strip()})
 
 @app.route('/rate_question')
