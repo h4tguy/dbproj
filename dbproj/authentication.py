@@ -1,7 +1,7 @@
 # Copied from http://flask.pocoo.org/snippets/8/ and then modified
 from functools import wraps
 from flask import  request, Response, session, redirect, url_for
-
+import json
 from dbproj import app
 
 # not sure if this is necessary anymore, just commenting out for now, sorry - Jarred
@@ -12,6 +12,8 @@ from dbproj import app
 
 @app.route('/get_salt', methods=['POST'])
 def get_salt():
+    '''
+    NOTE TO SEAN: Sorry about this gorilla commenting stuff out, just wanted to get the json working. - Jarred
 	global cur
 	tmp = json.loads(request.form['json'])
 	cur.execute("select salt from users where username=?", (tmp['username'],))
@@ -22,9 +24,18 @@ def get_salt():
 	temp_salt = os.urandom(24)
 	session['temp_salt']=temp_salt
 	return json.dumps({'salt':res[0],'temp_salt':temp_salt})
+    '''
+    print 'This is what the client sent:'
+    print request.data
+
+    # fake some data back to the client
+    tmp = json.dumps({'studentno': 'pfiekk345', 'salt': '12345', 'temp_salt': '67890'})
+    return tmp
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    '''
+    NOTE TO SEAN: Here I go again! sorry - Jarred.
     try:
         if 'username' in session:
             # User is logged in aleady.
@@ -66,6 +77,11 @@ def login():
         """
     finally:
         session.pop('temp_salt', None)
+    '''
+    print 'This is what the client sent:'
+    print request.data
+    # sending back dummy status
+    return json.dumps({'status': 'true'})
 
 def requires_auth(f):
     @wraps(f)
