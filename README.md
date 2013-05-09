@@ -1,9 +1,13 @@
 dbproj
 ======
 
-Required packages to run web server:
-	Flask (web framework)
-	Psycopg (postgresql driver)
+Install instructions
+====================
+1. Run ./setup.py in your shell
+2. That's it
+
+If you're on campus you might wanna set up your HTTP_PROXY environment variable like so:
+HTTP_PROXY="hmdyas001@proxynet.uct.ac.za" ./setup.py
 
 =========================================
 JSON API

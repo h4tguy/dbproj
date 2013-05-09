@@ -1,5 +1,5 @@
 #Put your flask here
-from flask import Flask, session, redirect,abort, render_template
+from flask import Flask, session, redirect, abort, render_template, g
 import os
 import json
 import md5
@@ -11,6 +11,11 @@ app = Flask(__name__)
 from authentication import get_salt, requires_auth
 from answer_q import *
 from get_user_data import *
+from db import connect_database
+
+@app.before_request
+def initialise():
+    g.db = connect_database()
 
 @app.route('/')
 def index():
