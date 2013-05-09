@@ -69,7 +69,7 @@ def login():
             else:
                 session['username'] = request.form['username']
                 #TODO: get use type from db.
-                session['use_type'] = use_type 
+                session['user_role'] = user_role
                 #TODO: store from_url so as to direct them to where they were trying to go.
                 return redirect(url_for('index'))
         else:
@@ -83,12 +83,17 @@ def login():
     # sending back dummy status
     return json.dumps({'status': 'true'})
 
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        # If no username is set, the user is not logged in.
-        if not 'username' in session:
-            return redirect(url_for('login'))
-        # TODO: add privilage checking here.
-        return f(*args, **kwargs)
-    return decorated
+def requires_auth(roles):
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            # If no username is set, the user is not logged in.
+            if not 'username' in session:
+                return redirect(url_for('login'))
+            else:
+                if session['user_role'] not in roles:
+                    return redirect(url_for('login'))
+            # TODO: add privilage checking here.
+            return f(*args, **kwargs)
+        return decorated
+    return decorator
