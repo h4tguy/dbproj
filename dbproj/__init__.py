@@ -64,12 +64,12 @@ def classlist():
 def show_score_questions():
 	return json.dumps({'diff_data':score_questions()})
 
-@app.route('/check_weak_question')
+@app.route('/check_weak_questions')
 def show_check_weak_question():
-	return json.dumps(check_weak_question())
+	return json.dumps({'questions':check_weak_question()})
 
-@app.route('/update_weak_question')
-def do_update_weak_question():
+@app.route('/update_weak_questions')
+def do_update_weak_questions():
 	data=json.loads(request.data)
 	update_weak_question(data['trues'],data['falses'])
 	return ""

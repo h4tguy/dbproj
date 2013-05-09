@@ -47,8 +47,27 @@ Get a question to rate
 '/classlist':
 	expects: anything
 	returns: {'classlist':[ [name,mark,avg rating of qs] for all students]}
-=========================================
 
+'/score_questions':
+	expects: anything
+	returns: {'diff_data':[[int qno,str question, str ans, str diff]for all questions]}
+
+'/check_weak_questions':
+	expects: anything
+	returns: {'questions':[[int qno, str question, str ans, bool useless ] for questions with difficulty=3]}
+
+'/update_weak_questions':
+	expects: {'trues':[qnos which must be made useless], 'falses':[qnos which must be unmade
+	useless]}
+	returns: empty string
+
+'/make_test':
+	expects: anything
+	returns: {'questions':[str questions], 'answers':[str answers]}
+	There will be at most ten questions and at most 10 anses, and there will be the same # of each
+
+
+=========================================
 Checking in
 
 Checking in - Pierre :p
