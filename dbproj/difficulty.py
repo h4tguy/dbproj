@@ -19,6 +19,8 @@ def update_scores():
 	cur.execute('''update questions inner join (select qno,avg(points) as score 
 	from questions inner join ratings on questions.qno=ratings.qno group by qno)
 	set difficulty=3 where score<2''') 
+	cur.execute('''update questions 
+	set difficulty=3 where useless''') 
 
 	return True
 
@@ -50,6 +52,13 @@ def check_weak_questions():
 	for i in anses:
 		qs[i[0]][0]+=" "+i[1]+") "+i[2]
 	return [[i]+qs[i] for i in qdict]
+
+def update_weak_question(trues, falses):
+	trues=tuple(trues)
+	falses=tuple(falses)
+	cur.execute('''update questions set useless=true where qno in %s''',(str(trues),))
+	cur.execute('''update questions set useless=false where qno in %s''',(str(falses),))
+	return True
 
 def gen_test():
 	update_scores()
