@@ -14,7 +14,7 @@ JSON API
 
 '/login':
   expects: {'studentno': value, 'hash': hashed_string}
-  returns: {'status': boolean} <- lowercase 'true' or 'false'
+  returns: {'status': 1} <- 0 = failuer, 1 = student, 2 = lecturer
 
 =========================================
 
