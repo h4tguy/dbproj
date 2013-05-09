@@ -45,19 +45,15 @@ def rate_question():
 	record_rating(session['username'],session['rate_q'].qno,data['points'],data['reason'])
 	return ""
 
-@app.route('/performance/<name>')
-def performance(name=None):
-	if name==None:
-		return ""
+@app.route('/performance')
+def performance():
+	name=json.loads(response.data)['name']
 	ans=answer_info(name)
 	return json.dumps({'total_answered':ans.total,'total_correct':ans.correct,'details':ans.detail})
 
-	pass
-
-@app.route('/questions/<name>')
-def questions(name=None):
-	if name==None:
-		return ""
+@app.route('/questions')
+def questions():
+	name=json.loads(response.data)['name']
 	return json.dumps({'question_info':question_info(name)})
 
 @app.route('/classlist')
