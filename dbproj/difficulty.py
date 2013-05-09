@@ -33,6 +33,7 @@ def score_questions():
 	qdict=dict()
 	for i in questions:
 		qdict[i[0]]=i[1:4]
+		qdict[i[0]][2]=Difficulty.get(i[3])
 	for i in anses:
 		qdict[i[0]][0]=qdict[i[0]][0]+" "+i[1]+") "+i[2]
 	return [[i]+qdict[i] for i in qdict]

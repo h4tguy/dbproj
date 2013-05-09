@@ -41,19 +41,19 @@ def get_rate_question():
 @app.route('/rate_question')
 @requires_auth(['users', 'admin'])
 def rate_question():
-	data=json.loads(response.data)
+	data=json.loads(request.data)
 	record_rating(session['username'],session['rate_q'].qno,data['points'],data['reason'])
 	return ""
 
 @app.route('/performance')
 def performance():
-	name=json.loads(response.data)['name']
+	name=json.loads(request.data)['name']
 	ans=answer_info(name)
 	return json.dumps({'total_answered':ans.total,'total_correct':ans.correct,'details':ans.detail})
 
 @app.route('/questions')
 def questions():
-	name=json.loads(response.data)['name']
+	name=json.loads(request.data)['name']
 	return json.dumps({'question_info':question_info(name)})
 
 @app.route('/classlist')
@@ -61,16 +61,23 @@ def classlist():
 	return json.dumps({'classlist':get_classlist()})
 
 @app.route('/score_questions')
-def score_questions():
-	pass
+def show_score_questions():
+	return json.dumps({'diff_data':score_questions()})
 
 @app.route('/check_weak_question')
-def check_weak_question():
-	pass
+def show_check_weak_question():
+	return json.dumps(check_weak_question())
+
+@app.route('/update_weak_question')
+def do_update_weak_question():
+	data=json.loads(request.data)
+	update_weak_question(data['trues'],data['falses'])
+	return ""
 
 @app.route('/make_test')
 def make_test():
-	pass
+	ans=gen_test()
+	return json.dumps({'questions':ans[0],'answers':ans[1]})
 
 app.secret_key = ' \xfe#\x9eO\xd1,\xd3\xb14\xfe\xca\x12\xee\xb1\x89\xd9\xf4\xa1[\x0e\xcb\x0f\xe8'
 if __name__ == "__main__":
