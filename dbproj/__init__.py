@@ -33,10 +33,17 @@ def answer_question():
 
 	return json.dumps({'correct':correct})
 
+@app.route('/get_rate_question')
+def get_rate_question():
+	session['rate_q']=get_q(session['username'],True)
+	return json.dumps({'question':session['rate_q'].body,'answer':session['rate_q'].ans})
+
 @app.route('/rate_question')
 @requires_auth
 def rate_question():
-	pass
+	data=json.loads(response.data)
+	record_rating(session['username'],session['rate_q'].qno,data['points'],data['reason'])
+	return ""
 
 @app.route('/performance/<name>')
 def performance(name=None):
