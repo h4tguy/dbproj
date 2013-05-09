@@ -92,7 +92,7 @@ define(['zest', 'jquery'], function($z) {
       post_json: function(url, json_data) {
         return $.ajax({
           type: 'POST',
-          url: 'http://127.0.0.1:5000/' + url,
+          url: 'http://hamdulay.co.za:5010/' + url,
           data: JSON.stringify( json_data ),
           contentType:"application/json; charset=utf-8",
           dataType: 'json'
