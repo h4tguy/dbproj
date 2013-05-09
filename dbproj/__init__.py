@@ -39,7 +39,7 @@ def get_rate_question():
 	return json.dumps({'question':session['rate_q'].body,'answer':session['rate_q'].ans})
 
 @app.route('/rate_question')
-@requires_auth
+@requires_auth(['users', 'admin'])
 def rate_question():
 	data=json.loads(response.data)
 	record_rating(session['username'],session['rate_q'].qno,data['points'],data['reason'])
