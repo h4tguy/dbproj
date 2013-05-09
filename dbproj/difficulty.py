@@ -6,6 +6,9 @@ def update_scores():
 	global cur
 	cur.execute('''update questions inner join (select qno,avg((rightanswer=answer)::int) as ans_rate
 	from questions inner join answers on questions.qno=answers.qno group by qno)
+	set difficulty=3 ''') 
+	cur.execute('''update questions inner join (select qno,avg((rightanswer=answer)::int) as ans_rate
+	from questions inner join answers on questions.qno=answers.qno group by qno)
 	set difficulty=2 where ans_rate>0.05''') 
 	cur.execute('''update questions inner join (select qno,avg((rightanswer=answer)::int) as ans_rate
 	from questions inner join answers on questions.qno=answers.qno group by qno)
@@ -13,11 +16,15 @@ def update_scores():
 	cur.execute('''update questions inner join (select qno,avg((rightanswer=answer)::int) as ans_rate
 	from questions inner join answers on questions.qno=answers.qno group by qno)
 	set difficulty=0 where ans_rate>0.75''') 
+	cur.execute('''update questions inner join (select qno,avg(points) as score 
+	from questions inner join ratings on questions.qno=ratings.qno group by qno)
+	set difficulty=3 where score<2''') 
+
 	return True
 
 def score_questions():
 	update_scores()
-	cur.execute('''select qno, question, rightanswer,difficulty from question''')
+	cur.execute('''select qno, question, rightanswer,difficulty from questions''')
 	questions=cur.fetchall()
 	cur.execute('select qno,letter,answer from mcqans order by letter')
 	anses=cur.fetchall()
@@ -25,20 +32,32 @@ def score_questions():
 	for i in questions:
 		qdict[i[0]]=i[1:4]
 	for i in anses:
-		qdict[i[0]][1]=qdict[i[0]][1]+" "+i[1]+") "+i[2]
+		qdict[i[0]][0]=qdict[i[0]][0]+" "+i[1]+") "+i[2]
 	return [[i]+qdict[i] for i in qdict]
 	
 
 def check_weak_questions():
 	update_scores()
+	cur.execute('''select qno,question, rightanswer,useless from questions where difficulty=3''')
+	res=cur.fetchall()
+	cur.execute('''select mcqans.qno,letter,answer from questions inner join mcqans
+	on mcqans.qno=questions.qno where difficulty=3''')
+	anses=cur.fetchall()
+	qs=dict()
+	for i in res:
+		qs[i[0]]=i[1:4]
+		qs[i[0]][2]=int(qs[i[0]][2])
+	for i in anses:
+		qs[i[0]][0]+=" "+i[1]+") "+i[2]
+	return [[i]+qs[i] for i in qdict]
 
 def gen_test():
 	update_scores()
-	cur.execute('''select qno,question, answer from questions where difficulty=0 limit 3''')
+	cur.execute('''select qno,question, rightanswer from questions where difficulty=0 limit 3''')
 	qs=cur.fetchall()
-	cur.execute('''select qno, question, answer from questions where difficulty=1 limit 4''')
+	cur.execute('''select qno, question, rightanswer from questions where difficulty=1 limit 4''')
 	qs=qs+cur.fetchall()
-	cur.execute('''select qno, question, answer from questions where difficulty=2 limit 3''')
+	cur.execute('''select qno, question, rightanswer from questions where difficulty=2 limit 3''')
 	qs=qs+cur.fetchall()
 	qnos=[i[0] for i in qs]
 	cur.execute('''select qno,letter,answer from mcqans
