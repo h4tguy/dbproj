@@ -12,7 +12,7 @@ MCQAns (Qno, Letter, Answer)
 Answers (Regnum, Qno, Answer)
 Ratings (Qno, Regnum, Points, Reason)
 
-Useful Derived Relations:
+Useful Derived Relations (will be kept permeneantly despite violating normalisation):
 
 QuestionDifficulty (Qno, Difficulty)
 Results (Regnum, FullName, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating)
@@ -65,20 +65,20 @@ CREATE TABLE Users (
 	FullName VARCHAR(50) NOT NULL,
 	Salt VARCHAR (20) NOT NULL,
 	HashedPassword VARCHAR(40),
-	UserType VARCHAR(7) NOT NULL
+	UserType VARCHAR(7) NOT NULL CONSTRAINT ValidUserType CHECK (UserType IN ('student','teacher'))
 );
 
 CREATE TABLE Questions (
 	Qno INTEGER PRIMARY KEY,
 	Question VARCHAR(100) NOT NULL,
 	RightAnswer VARCHAR(20) NOT NULL,
-	SetBy VARCHAR(9) NOT NULL,
+	SetBy VARCHAR(9) NOT NULL REFERENCES Users (Regnum),
 	Useless BOOLEAN
 );
 
 CREATE TABLE MCQans (
 	Qno INTEGER REFERENCES Questions (Qno),
-	Letter VARCHAR(1) NOT NULL,
+	Letter VARCHAR(1) NOT NULL CONSTRAINT ValidLetter CHECK (Letter IN ('A','B','C','D')),
 	Answer VARCHAR(20) NOT NULL,
 	
 	PRIMARY KEY( Qno, Letter )
@@ -95,7 +95,7 @@ CREATE TABLE Answers (
 CREATE TABLE Ratings (
 	Qno INTEGER REFERENCES Questions (Qno),
 	Regnum VARCHAR(9) REFERENCES Users (Regnum),
-	Points INTEGER,
+	Points INTEGER CONSTRAINT ValidPoints CHECK (Points >=1 AND Points <=5),
 	Reason VARCHAR(50),
 
 	PRIMARY KEY( Qno, Regnum )
@@ -104,4 +104,16 @@ CREATE TABLE Ratings (
 CREATE TABLE QuestionDifficulty (
 	Qno INTEGER PRIMARY KEY REFERENCES Questions (Qno),
 	Difficulty VARCHAR(8)
+);
+
+
+CREATE TABLE Results (
+	Regnum VARCHAR(9) REFERENCES Users (Regnum),
+	FullName VARCHAR(50),
+	TotalAnswers INTEGER,
+	CorrectAnswers INTEGER,
+	TotalQuestions INTEGER,
+	AverageRating REAL,
+
+	PRIMARY KEY (Regnum)
 );
