@@ -31,8 +31,22 @@ def score_questions():
 
 def check_weak_questions():
 	update_scores()
-	pass
 
 def gen_test():
 	update_scores()
-	ans=[]
+	cur.execute('''select qno,question, answer from questions where difficulty=0 limit 3''')
+	qs=cur.fetchall()
+	cur.execute('''select qno, question, answer from questions where difficulty=1 limit 4''')
+	qs=qs+cur.fetchall()
+	cur.execute('''select qno, question, answer from questions where difficulty=2 limit 3''')
+	qs=qs+cur.fetchall()
+	qnos=[i[0] for i in qs]
+	cur.execute('''select qno,letter,answer from mcqans
+			where qno in %s order by letter''', (str(tuple(qnos)),))
+	anses=cur.fetchall()
+	for i in xrange(len(qs)):
+		for j in anses:
+			if qs[i][0]==j[0]:
+				qs[i][1]+=" "+j[1]+") "+j[2]
+				break
+	return[[i[0] for i in qs],[i[1] for i in qs]]
