@@ -72,7 +72,8 @@ define(['zest', 'jquery'], function($z) {
             })
 
             // handle any errors in submitting the student number
-            .fail(function() {
+            .fail(function(err) {
+		  	  console.log(err);
               console.log('Error posting studentno.');
             });
 
@@ -91,7 +92,7 @@ define(['zest', 'jquery'], function($z) {
       post_json: function(url, json_data) {
         return $.ajax({
           type: 'POST',
-          url: 'http://localhost:5000/' + url,
+          url: 'http://127.0.0.1:5000/' + url,
           data: JSON.stringify( json_data ),
           contentType:"application/json; charset=utf-8",
           dataType: 'json'

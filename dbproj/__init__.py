@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 from authentication import get_salt, requires_auth
 from answer_q import *
+from get_user_data import *
 
 @app.route('/')
 def index():
@@ -21,12 +22,16 @@ def get_question():
 	session['curr_q']=Question()
 	session['curr_q'].body="This is a question"
 	session['curr_q'].ans='ans'
+	session['curr_q'].qno=42
 	return json.dumps({'question':session['curr_q'].body})
 
 @app.route('/answer_question')
 def answer_question():
-	their_ans=json.loads(request.data)['answer']
-	return json.dumps({'correct':their_ans.strip()==session['curr_q'].ans.strip()})
+	their_ans=(json.loads(request.data)['answer']).strip()
+	correct=their_ans.strip()==session['curr_q'].ans.strip()
+	record_q(session['username'],session['curr_q'].qno,their_ans)
+
+	return json.dumps({'correct':correct})
 
 @app.route('/rate_question')
 @requires_auth
@@ -35,15 +40,22 @@ def rate_question():
 
 @app.route('/performance/<name>')
 def performance(name=None):
+	if name==None:
+		return ""
+	ans=answer_info(name)
+	return json.dumps({'total_answered':ans.total,'total_correct':ans.correct,'details':ans.detail})
+
 	pass
 
 @app.route('/questions/<name>')
 def questions(name=None):
-	pass
+	if name==None:
+		return ""
+	return json.dumps({'question_info':question_info(name)})
 
 @app.route('/classlist')
 def classlist():
-	pass
+	return json.dumps({'classlist':get_classlist()})
 
 @app.route('/score_questions')
 def score_questions():
