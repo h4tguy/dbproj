@@ -2,7 +2,10 @@ from flask import g
 
 #This is a dummy class for passing metadata with questions
 class Question:
-	pass
+	qno = None
+	ans = None
+	body = None
+	qtype = None
 
 def get_q_type(qid):
 	cur = g.db.cursor()
