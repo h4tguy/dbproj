@@ -1,1 +1,1 @@
-window.domain = 'http://localhost:5000/';
+window.domain = 'http://127.0.0.1:5010/';

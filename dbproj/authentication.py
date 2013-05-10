@@ -1,87 +1,100 @@
 # Copied from http://flask.pocoo.org/snippets/8/ and then modified
+import random
+import string
 from functools import wraps
 from flask import  request, Response, session, redirect, url_for, g
 import json
+import hashlib
 from dbproj import app
 
 # not sure if this is necessary anymore, just commenting out for now, sorry - Jarred
 #def make_login_screen(bad=False):
 #pulling out making the login screen to a separate method
 #TODO: templatise this.
-    #return template_lookup.get_template('./temp_login.html').render(bad=bad)
+	#return template_lookup.get_template('./temp_login.html').render(bad=bad)
 
 @app.route('/get_salt', methods=['POST'])
 def get_salt():
-	tmp = json.loads(request.data)
+	regnum = json.loads(request.data)['studentno']
 
 	cur = g.db.cursor()
-	cur.execute("select Salt from Users where Regnum=%s", (tmp['studentno'],))
+	cur.execute("select regnum, salt from Users where regnum=%s", (regnum,))
 	res = cur.fetchone()
+	regnum = res[0]
+	salt = res[1]
 	cur.close()
 
 	#no corresponding user in db
 	if res is None:
-		return json.dumps({})
+		return '{}'
 
-	temp_salt = os.urandom(24)
+	temp_salt = ''.join(random.choice(string.ascii_letters) for i in xrange(24))
 	session['temp_salt'] = temp_salt
-	return json.dumps({'salt': res[0],'temp_salt': temp_salt})
+	return '{"salt": "%s","temp_salt": "%s", "studentno": "%s"}' % (salt, temp_salt, regnum)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    try:
-        if 'username' in session:
-            # User is logged in aleady.
-            return redirect(url_for('index'))
-        if 'username' in request.form and request.form['username']  == 'avoid3d':
-            session['username'] = 'avoid3d'
-            return redirect(url_for('index'))
-        else:
-            # adjusting this too, sorry once again, just trying to test without the templating - Jarred
-            #return make_login_screen()
-            return redirect(url_for('index'))
-        """
-        elif request.method == 'POST':
-            if 'temp_salt' not in session:
-                # This branch is cool - Pierre
-                # if this branch occurs, we may have an attacker - Sean
-                return make_login_screen()
-            # do authentication
-            # TODO: This is valnurable to sql injection.
-            cur.execute('select hash, use_type from usern where username='+request.form['username'])
-            res = cur.fetchone()
-            # I don't understand this? - Pierre
-            if not res:
-                abort(500) # there should always be one match since the clinet can't change the username since previous access
-            hsh, use_type=res
-            hasher=md5.new() # should we make new hashers a lot? entropy wise
-			#what do you mean entropy-wise? I see no problem with it
-            hasher.update(hsh+temp_salt)
-            if(hasher.digest() != request.form['hash']):
-                return make_login_screen(True)
-            else:
-                session['username'] = request.form['username']
-                #TODO: get use type from db.
-                session['user_role'] = user_role
-                #TODO: store from_url so as to direct them to where they were trying to go.
-                return redirect(url_for('index'))
-        else:
-            return make_login_screen()
-        """
-    finally:
-        session.pop('temp_salt', None)
+	cur = g.db.cursor()
+	try:
+		loggedIn = False
+		requestData = json.loads(request.data)
+		regnum = requestData['studentno']
+		clientHash = requestData['hash']
+
+		# User is logged in aleady.
+		if 'username' in session:
+			loggedIn = True
+		elif request.method == 'POST':
+			# wtf?
+			if 'temp_salt' not in session:
+				abort(500)
+
+			cur.execute('select hashedpassword, usertype from Users where regnum=%s', (regnum, ))
+			res = cur.fetchone()
+
+			if not res:
+				abort(500) # there should always be one match since the clinet can't change the username since previous access
+
+			hsh = res[0]
+			user_role = res[1]
+
+			hasher = hashlib.md5()
+			temphasher = hashlib.md5()
+			temphasher.update(session['temp_salt'])
+			hasher.update(hsh + temphasher.hexdigest())
+
+			print 'db hash', hsh
+			print 'temp salt hash', temphasher.hexdigest()
+			print 'resultant hash', hasher.hexdigest()
+			print 'client hash', clientHash
+
+
+			if(hasher.hexdigest() != clientHash):
+				loggedIn = False
+			else:
+				loggedIn = True
+				session['username'] = request.form['username']
+				session['user_role'] = user_role
+
+		if loggedIn:
+			return "{'status': 1}"
+		else:
+			return "{'status': 0}"
+	finally:
+		cur.close()
+		session.pop('temp_salt', None)
 
 def requires_auth(roles):
-    def decorator(f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            # If no username is set, the user is not logged in.
-            if not 'username' in session:
-                return redirect(url_for('login'))
-            else:
-                if session['user_role'] not in roles:
-                    return redirect(url_for('login'))
-            # TODO: add privilage checking here.
-            return f(*args, **kwargs)
-        return decorated
-    return decorator
+	def decorator(f):
+		@wraps(f)
+		def decorated(*args, **kwargs):
+			# If no username is set, the user is not logged in.
+			if not 'username' in session:
+				return redirect(url_for('login'))
+			else:
+				if session['user_role'] not in roles:
+					return redirect(url_for('login'))
+			# TODO: add privilage checking here.
+			return f(*args, **kwargs)
+		return decorated
+	return decorator

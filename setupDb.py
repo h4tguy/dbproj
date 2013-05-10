@@ -51,3 +51,4 @@ c = db.cursor()
 c.execute(sql)
 c.close()
 db.commit()
+print 'yes?'

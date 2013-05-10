@@ -1,3 +1,3 @@
-DB_HOST = 'hamdulay.co.za'
+DB_HOST = 'localhost'
 USER = 'dbass'
-PASSWORD = 'somethingamazingwecareabout'
+PASSWORD = ''
