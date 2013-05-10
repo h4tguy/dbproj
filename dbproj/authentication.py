@@ -1,4 +1,4 @@
-# Copied from http://flask.pocoo.org/snippets/8/ and then modified
+import psycopg2
 import random
 import string
 from functools import wraps
@@ -27,6 +27,29 @@ def get_salt():
 	session['temp_salt'] = temp_salt
 	return '{"salt": "%s","temp_salt": "%s", "studentno": "%s"}' % (salt, temp_salt, regnum)
 
+@app.route('/register', methods=['POST'])
+def register():
+	requestData = json.loads(request.data)
+	salt = ''.join(random.choice(string.ascii_letters) for i in xrange(20))
+
+	username, passwordHash = requestData['username'], requestData['passwordHash']
+	print passwordHash
+	hasher = hashlib.md5()
+	hasher.update(passwordHash+salt)
+	dbHash = hasher.hexdigest()
+	print dbHash
+
+	cur = g.db.cursor()
+	try:
+		cur.execute("insert into Users values (%s, %s, %s, %s, '1')", (username, username, salt, dbHash))
+	except psycopg2.IntegrityError:
+		g.db.rollback()
+	finally:
+		cur.close()
+		g.db.commit()
+
+	return '{"status": 1}'
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	cur = g.db.cursor()
@@ -38,8 +61,6 @@ def login():
 		clientHash = requestData['hash']
 
 		# User is logged in aleady.
-		#if 'username' in session:
-		#	loggedIn = True
 		if request.method == 'POST':
 			# wtf?
 			if 'temp_salt' not in session:
@@ -87,7 +108,7 @@ def requires_auth(roles):
 			else:
 				if session['user_role'] not in roles:
 					return redirect(url_for('login'))
-			
+
 			return f(*args, **kwargs)
 		return decorated
 	return decorator

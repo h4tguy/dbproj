@@ -33,6 +33,7 @@
 
       <footer id="footer">                        
         <button id="login-button">Log in</button>
+        <button id="register-button">Register</button>
       </footer>
 
     </section>
@@ -51,6 +52,19 @@
       /* We have to wait until the document is ready before executing javascript */
       $(document).ready(function() {
  
+		$('#register-button').click(function(e) {
+          var user = $('#studentno').val();
+          var pass = $('#password').val();
+
+		  console.log(pass);
+           var db_hash =  CryptoJS.MD5(pass).toString();
+		   post_json('register', {'username': user, 'passwordHash': db_hash})
+		   	.done(handle_authentication_status)
+			.fail(function(result) {
+				console.log('Error registering and stuff');
+			});
+		});
+
         /** 
          * Process to log in and authenticate a user
          * Event which fires when the Log In button is pressed
