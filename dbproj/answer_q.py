@@ -7,6 +7,7 @@ class Question:
 	body = None
 	qtype = None
 
+#Get whether a question is an MCQ or not
 def get_q_type(qid):
 	cur = g.db.cursor()
 
@@ -16,14 +17,16 @@ def get_q_type(qid):
 
 	return questionType
 
+#Get the next question to ask a user
 def get_q(username, for_rating=False):
 	cur = g.db.cursor()
 
-	if not for_rating:
+	if not for_rating: #ie. if the question is not being retrieved to let the user rate the question, but rather to answer it
 		cur.execute('''select qno, question, rightanswer  from questions where qno not in
 			(select qno from answers where regnum=%s)  and qno not in (select qno from ratings
 				where regnum=%s) and not useless limit 1''',(username,username))
-	else:
+		# This query gets 1 question that the answer has not yet answered or rated yet and is not flagged useless
+	else: #If the question is for rating, then check that the user hasn't yet rated it
 		cur.execute('''select qno, question, rightanswer  from questions where qno not in
 			(select qno from ratings where regnum=%s) and not useless limit 1''',
 			(username, ))
@@ -31,12 +34,12 @@ def get_q(username, for_rating=False):
 	res=cur.fetchone()
 	if not res:
 		return None
-
+	#If the question is an MCQ, the answers are required:
 	cur.execute('select letter,answer from mcqans where qno='+str(res[0]))
 	mcq=cur.fetchall()
 	cur.close()
 
-
+	#ans is the object that will be returned containing all the data
 	ans=Question()
 	ans.ans=res[2]
 	ans.body = res[1]
@@ -47,6 +50,7 @@ def get_q(username, for_rating=False):
 
 	return ans
 
+#Records a student's answer to a question in the answers table
 def record_ans(u_name,qno,ans):
 	cur = g.db.cursor()
 	cur.execute('''insert into answers (regnum,qno,answer)
@@ -54,7 +58,7 @@ def record_ans(u_name,qno,ans):
 	cur.close()
 	g.db.commit()
 	return True
-
+#Records a rating of a question
 def record_rating(u_name,qno,pts,reason):
     if pts > 100:
         return False
