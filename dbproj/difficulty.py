@@ -107,11 +107,12 @@ def gen_test():
 	cur = g.db.cursor()
 	update_scores()
 	cur.execute('''select qno,question, rightanswer from questions where difficulty=0 limit 3''')
-	qs=cur.fetchall()
+	qs=[list(x) for x in cur.fetchall()]
 	cur.execute('''select qno, question, rightanswer from questions where difficulty=1 limit 4''')
-	qs=qs+cur.fetchall()
+	qs=qs+[list(x) for x in cur.fetchall()]
 	cur.execute('''select qno, question, rightanswer from questions where difficulty=2 limit 3''')
-	qs=qs+cur.fetchall()
+	qs=qs+[list(x) for x in cur.fetchall()]
+	qs = list(qs)
 	#Need to get MCQs answers and match them to the questions
 	qnos=[i[0] for i in qs]
 	cur.execute('''select qno,letter,answer from mcqans

@@ -4,6 +4,7 @@ from dbproj import app, answer_q
 @app.route('/menu')
 def menuStudent():
 	print session['user_role']
+	print session['username']
 	return render_template('menu.html', teacher=int(session['user_role']))
 
 @app.route('/questionsAnswer')
