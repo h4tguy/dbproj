@@ -1,26 +1,40 @@
+from flask import g
 
 #This is a dummy class for passing metadata with questions
 class Question:
 	pass
 
-def get_q(u_name,for_rating=False):
-	global cur
-	cur.execute('''select qno, question, right_answer  from questions where qno not in 
-		(select qno from answers where regnum=%s) %s limit 1''',
-		(u_name, ''' and qno not in (select qno from answers 
-			where regnum='''+str(u_name) if for_rating else ""))
+def get_q_type(qid
+
+def get_q(username, for_rating=False):
+	cur = g.db.cursor()
+
+	if for_rating:
+		cur.execute('''select qno, question, rightanswer  from questions where qno not in
+			(select qno from answers where regnum=%s)  and qno not in (select qno from answers
+				where regnum=%s limit 1''',(username,username))
+	else:
+		cur.execute('''select qno, question, rightanswer  from questions where qno not in
+			(select qno from answers where regnum=%s) limit 1''',
+			(username, ))
+
 	res=cur.fetchone()
 	if not res:
 		return None
+
 	cur.execute('select letter,answer from mcqans where qno='+str(res[0]))
 	mcq=cur.fetchall()
+	cur.close()
+
+
 	ans=Question()
 	ans.ans=res[2]
 	ans.body=reduce(lambda x,y: str(x)+"\n"+str(y),[str(i[0])+" "+str(i[1]) for i in mcq],res[1])
-	ans.qno=res[0]
+	ans.qno=int(res[0])
+
 	return ans
 
-def record_q(u_name,qno,ans):
+def record_ans(u_name,qno,ans):
 	global cur
 	cur.execute('''insert into answers (regnum,qno,answer)
 		values (%s,%s,%s)''',(u_name,qno,ans))

@@ -24,11 +24,7 @@ def index():
 
 @app.route('/get_question')
 def get_question():
-	#session['curr_q']=get_q(session['username'])
-	session['curr_q']=Question()
-	session['curr_q'].body="This is a question"
-	session['curr_q'].ans='ans'
-	session['curr_q'].qno=42
+	session['curr_q']=get_q(session['username'])
 	return json.dumps({'question':session['curr_q'].body})
 
 @app.route('/answer_question')
