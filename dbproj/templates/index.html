@@ -129,7 +129,7 @@
             md5 = CryptoJS.MD5;
 
         // Hash the password, salt and temp salt to form the final hash string
-        var hashed_string =  md5( ( md5(pass).toString() + salt ).toString() + md5(temp_salt).toString() ).toString();
+        var hashed_string =  md5( md5( md5(pass).toString() + salt ).toString() + md5(temp_salt).toString() ).toString();
         console.log(hashed_string);
 
         // Send the hashed string back to the server along with the username, final authentication step
