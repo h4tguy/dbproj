@@ -76,7 +76,9 @@
           post_json('get_salt', {'studentno': user} )
             .done( function(result) {
               // ... then we process the salts with the password and send that for authentication...
-              process_salts( result, self.pass )
+              consoel.log('hello');
+              console.log('self pass: ' + self.pass);
+              process_salts( result)
 
                 .done( function(result) {
                   // .. then we handle the authentication result (true/false)
@@ -121,10 +123,11 @@
        * It generates the final hash string which is used for authentication
        * @param data, the json object with the salt and temp_salt strings
        **/
-      var process_salts = function(json_data, pass) {
+      var process_salts = function(json_data) {
 
         var studentno = json_data.studentno,
             salt = json_data.salt,
+            pass = $('#password').val(),
             temp_salt = json_data.temp_salt,
             md5 = CryptoJS.MD5;
 
