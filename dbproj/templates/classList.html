@@ -21,23 +21,15 @@
         <ul id="todo-list">          
           <li class="student_results headers">
             <div class="view">
-              <label class="long">Name</label>
-              <label>Correct</label>
-              <label>Incorrect</label>
-              <label>Grade</label>
-            </div>
-          </li>
-          <li>
-            <div class="view">
-              <input id="studentno" class="wide" placeholder="Enter student number...">
-              <button id="request-button">Request >></button>
+              <label class="long">Student Number</label>
+              <label>Average Mark</label>
+              <label>Average Rating</label>
             </div>
           </li>
           <li class="student_results values">
             <div class="view">
               <label id="name" class="long">-</label>
-              <label id="correct">-</label>
-              <label id="incorrect">-</label>
+              <label id="avgMark">-</label>
               <label id="grade">-</label>
             </div>
           </li>
@@ -72,8 +64,8 @@
 
         });
 
-        function request_results(data) {
-          post_json('/answer_question', {qid: qid, answer: answer} )
+        function populate_classlist() {
+          post_json('/classlist', {} )
             .done( function(result) {
               handle_response(result);
             })
@@ -102,6 +94,7 @@
       };
 
       var handle_response = function(data) {
+		  console.log(data);
 
         $('#studentno').css('background', '#C4F1C4');
         setTimeout(function() {
@@ -115,7 +108,7 @@
       var populateResults = function(data) {
 
         // maintain the current height
-        var container = $('#main'),
+        var container = $('#main ul'),
             student_results = $('.student_results.values'),
             name = $('#name');
             correct = $('#correct');
@@ -126,22 +119,21 @@
 
         student_results.css('opacity', 0);
 
-        setTimeout(function() {
+		if (data.classlist.length != 0) {
+			container.find('.values').detach();
+		}
 
-          // reset the question
-          name.text( data.name );
-          correct.text( data.correct );
-          incorrect.text( data.incorrect );
-          grade.text( data.grade );
-          $('#studentno').val('');
-
-          // display the new question
-          student_results.css('opacity', '1');
-
-        }, 500); // end setTimeout
+		for (var i in data.classlist) {
+			var student = data.classlist[i];
+			console.log(student);
+			var row = '<li class="student_results values"><div class="view"><label id="name" class="long">'+student[0]+'</label>'+
+				'<label id="avgMark">'+student[1]+'</label><label id="idontknow">'+student[2]+'</label></div></li>';
+			container.append(row);
+		}
 
       };
 
+		populate_classlist();
     });
     </script>
     

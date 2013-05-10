@@ -73,7 +73,7 @@ def questions():
 	name=json.loads(request.data)['name']
 	return json.dumps({'question_info':question_info(name)})
 
-@app.route('/classlist')
+@app.route('/classlist', methods=['GET', 'POST'])
 def classlist():
 	return json.dumps({'classlist':get_classlist()})
 

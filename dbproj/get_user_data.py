@@ -1,16 +1,21 @@
 #Data on students, for use by staff
+from flask import g
 
 class Info:
 	pass
 
 def cust_fmt(x):
-	if x==-1:
+	if x<0:
 		return "n/a"
 	return "%.2f"%(x)
+def perc_fmt(x):
+	if x<0:
+		return "n/a"
+	return "%.2f%%"%(100*x)
 
 def answer_info(u_name):
 	global cur
-	cur.execute('''select qno,rightanswer,answer from 
+	cur.execute('''select qno,rightanswer,answer from
 	questions inner join answers on questions.qno=answers.qno
 	where answers.regnum=%s''',(u_name,))
 	res=cur.fetchall()
@@ -19,7 +24,7 @@ def answer_info(u_name):
 	ans.answered=res.size()
 	ans.correct=sum(corr)
 	ans.detail=res
-	return ans 
+	return ans
 
 def question_info(u_name):
 	global cur
@@ -31,21 +36,21 @@ def question_info(u_name):
 		res[i[0]].tot=0
 		res[i[0]].rat=0
 	cur.execute('''select qno,count(*) from questions inner join answers
-	on questions.qno=answers.qno and rightanswer=answer 
+	on questions.qno=answers.qno and rightanswer=answer
 	where questions.setby=%s group by qno''',(u_name,))
 	corr=cur.fetchall()
 	for i in corr:
 		if i[0] in res:
 			res[i[0]].corr=i[1]
 	cur.execute('''select qno,count(*) from questions inner join answers
-	on questions.qno=answers.qno 
+	on questions.qno=answers.qno
 	where questions.setby=%s group by qno''',(u_name,))
 	tot=cur.fetchall()
 	for i in tot:
 		if i[0] in res:
 			res[i[0]].tot=i[1]
 	cur.execute('''select qno,avg(points) from questions inner join ratings
-	on questions.qno=ratings.qno 
+	on questions.qno=ratings.qno
 	where questions.setby=%s group by qno''',(u_name,))
 	rat=cur.fetchall()
 	for i in rat:
@@ -56,7 +61,8 @@ def question_info(u_name):
 	return ans
 
 def get_classlist():
-	cur.execute('''select regnum from users where use_type=1''')
+	cur = g.db.cursor()
+	cur.execute('''select regnum from Users where usertype='1' ''')
 	names=[i[0] for i in cur.fetchall()]
 	res=dict()
 	for i in names:
@@ -68,7 +74,7 @@ def get_classlist():
 	group by setby''')
 	qs=cur.fetchall()
 	cur.execute('''select regnum, avg((rightanswer=answer)::int) from questions inner join
-	answeres on questions.qno=answers.qno group by regnum''')
+	answers on questions.qno=answers.qno group by regnum''')
 	anss=cur.fetchall()
 	for i in anss:
 		if i[0] in res:
@@ -76,8 +82,9 @@ def get_classlist():
 	for i in qs:
 		if i[0] in res:
 			res[i[0]].qs=i[1]
-	ans=[(i,cust_fmt(100*res[i].ans)+"%",cust_fmt(res[i].qs)) for i in res]
+	ans=[(i,perc_fmt(100*res[i].ans),cust_fmt(res[i].qs)) for i in res]
 	ans.sort()
+	cur.close()
 	return ans
 
 
