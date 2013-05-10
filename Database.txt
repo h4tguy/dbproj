@@ -7,17 +7,10 @@ Summary:
 Relations:
 
 Users (Regnum, FullName, Salt, HashedPassword, UserType)
-Questions (Qno, Question, RightAnswer, SetBy, Useless)
+Questions (Qno, Question, RightAnswer, SetBy, Useless, Difficulty)
 MCQAns (Qno, Letter, Answer)
 Answers (Regnum, Qno, Answer)
 Ratings (Qno, Regnum, Points, Reason)
-
-Useful Derived Relations (will be kept permeneantly despite violating normalisation):
-
-QuestionDifficulty (Qno, Difficulty)
-Results (Regnum, FullName, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating)
-
-
 
 Necessary:
 ----------
@@ -28,7 +21,7 @@ Users (Regnum, Salt, HashedPassword, UserType):
 	(Student or Teacher). FullName is necessary for when reporting students' results.
 
 Questions:
-	All Questions, MCQ or one-word answer, are stored in Questions (Qno, Question, RightAnswer, SetBy, Useless). In
+	All Questions, MCQ or one-word answer, are stored in Questions (Qno, Question, RightAnswer, SetBy, Useless, Difficulty). In
 	addition, the answers to all the MCQs are stored in MCQAns (Qno, Letter, Answer), where Letter will in general 
 	be one of 'A','B','C' or 'D' but any MCQ is not restricted to having exactly 4 answers.
 
@@ -42,19 +35,6 @@ Ratings (Qno, Regnum, Points, Reason):
 	the same question twice.
 
 
-
-Derived Relations that will be needed for queries:
---------------------------------------------------
-
-Results (Regnum, FullName, TotalAnswers, CorrectAnswers, TotalQuestions, AverageRating):
-	As this table is derived from the answers and ratings tables, it isn't necessary. We do need to be able to make 
-	a class list showing results, however, so it would be useful at least as a temporary construct.
-
-QuestionDifficulty (Qno, Difficulty):
-	Another derived table where the difficulty of a question is some function of the proportion of people who got 
-	it correct and how it was rated. Difficulty can be any of {Easy, Average, Hard, Unusable}. We need to be able 
-	to generate a report of every question in the database along with its difficulty. We also need to be able to 
-	make a test of questions with varying difficulty.
 
 
 PSQL to create the tables:
@@ -73,7 +53,8 @@ CREATE TABLE Questions (
 	Question VARCHAR(100) NOT NULL,
 	RightAnswer VARCHAR(20) NOT NULL,
 	SetBy VARCHAR(9) NOT NULL REFERENCES Users (Regnum),
-	Useless BOOLEAN
+	Useless BOOLEAN,
+	Difficulty VARCHAR(8) CONSTRAINT ValidDifficulty CHECK (Difficulty IN ('easy','average','hard','unusable'))
 );
 
 CREATE TABLE MCQans (
@@ -99,21 +80,4 @@ CREATE TABLE Ratings (
 	Reason VARCHAR(50),
 
 	PRIMARY KEY( Qno, Regnum )
-);
-
-CREATE TABLE QuestionDifficulty (
-	Qno INTEGER PRIMARY KEY REFERENCES Questions (Qno),
-	Difficulty VARCHAR(8)
-);
-
-
-CREATE TABLE Results (
-	Regnum VARCHAR(9) REFERENCES Users (Regnum),
-	FullName VARCHAR(50),
-	TotalAnswers INTEGER,
-	CorrectAnswers INTEGER,
-	TotalQuestions INTEGER,
-	AverageRating REAL,
-
-	PRIMARY KEY (Regnum)
 );
