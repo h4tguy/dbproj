@@ -151,9 +151,13 @@
        * @param data, the {authentication: true/false} json object
        **/
       var handle_authentication_status = function(data) {
-        // until further notice we just log the result to the console
-        console.log('login result');
-        console.log(data);
+          if (data.status == 0) {
+              // incorrect username or password
+          } else if (data.status == 1) {
+            window.location =  '/menu/student';
+        } else if (data.status == 2) {
+            window.location =  '/menu/teacher';
+        }
       }
 
     </script>

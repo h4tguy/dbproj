@@ -12,6 +12,7 @@ from authentication import get_salt, requires_auth
 from answer_q import *
 from get_user_data import *
 from db import connect_database
+import static
 
 @app.before_request
 def initialise():
