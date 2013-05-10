@@ -26,7 +26,7 @@ answering questions). They can also view all 'weak' questions - questions which 
 rated very poorly. They can flag these weak questions as unusable, in which case they will not be asked in the future. 
 They can also view a report on all the questions that have been submitted, check a specific students' performance at 
 answering questions, and check a specific students' questions. Teachers are also given the ability to generate a test 
-of 10 questions, with a certain number of questions of varying levels of difficulty.
+of up to 10 questions, with a certain number of questions of varying levels of difficulty.
 
 Database Implementation
 =======================
@@ -73,3 +73,22 @@ Ratings (Qno, Regnum, Points, Reason):
 A table to store how questions were rated by users. There should be a score from 1 to 100 (points) as well as a
 reason for the rating given. The rater's Regnum is also stored  should be able to safely assume no one rates
 the same question twice.
+
+Database Interaction
+====================
+
+db.py returns a connection to the database.
+
+authentication.py handles database queries required for login and finds the User Type to check if the role of the user 
+in the system has permissions for access.
+
+answer_q.py handles all the interaction necessary for allowing a student to answer a question. This includes getting the 
+question, getting the possible answers for MCQs, and recording the student's answer.
+
+get_user_data.py handles the interaction for reports about a specific student or the whole class list.
+
+difficulty.py handles setting the difficulty of questions, handling 'weak' questions and generates a test of up to 10 
+questions, varying in difficulty.
+
+List of Files
+=============
