@@ -68,7 +68,6 @@
 
           window.i++;
           var qid = $('#question_number').text().split('.')[0];
-          /*
           post_json('/answer_question', {qid: qid, answer: answer} )
             .done( function(result) {
               handle_response(result);
@@ -77,13 +76,6 @@
             .fail( function(result) {
               console.log('There was an error posting the answer.');
             });          
-          */
-          if(window.i == 1 || answer == 'C') {
-            handle_response({iscorrect: 1});
-          } else {
-            handle_response({iscorrect: 0});
-          }
-
         };
 
         /**
@@ -106,15 +98,16 @@
 
       var handle_response = function(data) {
 
-        if(data.iscorrect == 1) {
+        if(data.correct == 1) {
           var ans = $('#answer');
           $('#main').css('background', '#C4F1C4');
-          setTimeout(function() {
-            getNextQuestion();
-          }, 1000);
-        } else if(data.iscorrect == 0) {
+		  setTimeout(function() {
+			getNextQuestion();
+		  }, 1000);
+        } else if(data.correct == 0) {
           displayIncorrect();
         }
+
 
       };
 

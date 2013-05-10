@@ -1,5 +1,5 @@
 #Put your flask here
-from flask import Flask, session, redirect, abort, render_template, g
+from flask import Flask, session, redirect, abort, render_template, g, request
 import os
 import json
 import md5
@@ -24,16 +24,26 @@ def index():
 
 @app.route('/get_question', methods=['POST', 'GET'])
 def get_question():
-	question=session['curr_q']=get_q(session['username'])
+	question = session['curr_q'] = get_q(session['username'])
 	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype})
 
-@app.route('/answer_question')
+@app.route('/answer_question', methods=['POST', 'GET'])
 def answer_question():
-	their_ans=(json.loads(request.data)['answer']).strip()
-	correct=their_ans.strip()==session['curr_q'].ans.strip()
-	record_q(session['username'],session['curr_q'].qno,their_ans)
+	question = session['curr_q']
+	correctAnswer = question.ans
+	userAnswer = json.loads(request.data)['answer']
 
-	return json.dumps({'correct':correct})
+	cur = g.db.cursor()
+	cur.execute('select count(*) from answers where regnum = %s and qno = %s', (session['username'], question.qno))
+	answeredBefore = cur.fetchone()[0] > 0
+	if not answeredBefore:
+		cur.execute('insert into answers values (%s, %s, %s)', (session['username'], question.qno, userAnswer))
+	else:
+		cur.execute('update answers set answer = %s where regnum = %s and qno = %s', (userAnswer, session['username'], question.qno))
+	cur.close()
+	g.db.commit()
+
+	return json.dumps({'correct': correctAnswer == userAnswer})
 
 @app.route('/get_rate_question')
 def get_rate_question():
