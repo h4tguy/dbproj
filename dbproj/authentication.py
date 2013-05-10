@@ -75,9 +75,9 @@ def login():
 				session['user_role'] = user_role
 
 		if loggedIn:
-			return "{'status': 1}"
+			return '{"status": 1}'
 		else:
-			return "{'status': 0}"
+			return '{"status": 0}'
 	finally:
 		cur.close()
 		session.pop('temp_salt', None)
