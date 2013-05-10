@@ -32,7 +32,6 @@
       </section>
 
       <footer id="footer">                        
-        <button id="register-button">Register</button>
         <button id="login-button">Log in</button>
       </footer>
 
@@ -45,6 +44,7 @@
 
     <script src="static/js/jquery.js"></script>
     <script src="static/js/md5.js"></script>
+    <script src="static/js/app.js"></script>
 
     <script>
 
@@ -109,7 +109,7 @@
 
         return $.ajax({
                   type: 'POST',
-                  url: 'http://localhost:5000/' + url,
+                  url: window.domain + url,
                   data: JSON.stringify( json_data ),
                   contentType:"application/json; charset=utf-8",
                   dataType: 'json'
