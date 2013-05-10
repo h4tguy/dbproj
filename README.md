@@ -71,8 +71,7 @@ A table for Answers that records who answered which question with what answer.
 
 Ratings (Qno, Regnum, Points, Reason):
 A table to store how questions were rated by users. There should be a score from 1 to 100 (points) as well as a
-reason for the rating given. The rater's Regnum is also stored  should be able to safely assume no one rates
-the same question twice.
+reason for the rating given. The rater's Regnum is also stored.
 
 Database Interaction
 ====================
