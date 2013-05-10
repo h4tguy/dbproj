@@ -118,7 +118,11 @@ Viewing Questions submitted by a user
 Rate a Question
 
  You will be given a question along with its answer and will be able to enter a rating value between 0 and 100.  larger numbers will be cleared out when the input box loses focus and the submit button will become disabled until the number is valid
+
+Populating the Database
  
+ CSV files have been supplied that can be used to populate the database with sample data. These files are AnswerData.csv,
+ MCQAnsData.csv, QuestionsData.csv, ratingsData.csv and userlist.csv.
 
 List of Files
 =============
