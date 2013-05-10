@@ -58,10 +58,7 @@
         $('#login-button').click(function(e) {
 
           // Gather the user credentials
-          var self = this,
-              user = $('#studentno').val(),
-              pass = $('#password').val(),
-              pass_hash = CryptoJS.MD5(pass).toString();
+          var user = $('#studentno').val();
 
           // Prevent the button from attempting to submit anything
           e.preventDefault();
