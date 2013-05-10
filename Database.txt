@@ -54,7 +54,7 @@ CREATE TABLE Questions (
 	RightAnswer VARCHAR(20) NOT NULL,
 	SetBy VARCHAR(9) NOT NULL REFERENCES Users (Regnum),
 	Useless BOOLEAN,
-	Difficulty VARCHAR(8) CONSTRAINT ValidDifficulty CHECK (Difficulty IN ('easy','average','hard','unusable'))
+	Difficulty INTEGER CONSTRAINT ValidDifficulty CHECK (Difficulty < 4 AND Difficult >= 0)
 );
 
 CREATE TABLE MCQans (
