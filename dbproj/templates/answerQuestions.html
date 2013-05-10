@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>[Title goes here]</title>
+    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/app.css">
+  </head>
+
+  <body id="full">
+
+    <section id="logo">
+      <img src="static/img/logo-icon.png" />
+    </section>
+
+    <section id="todoapp">            
+
+      <section id="main">
+        <ul id="todo-list">
+          <li>
+            <div class="view">
+              <label><span id="question_number">1.</span> <span id="question">The term used for the row of a relation is a?</span></label>              
+            </div>
+          </li>
+          <li id="answer-container">
+            <div class="view">
+              <input id="answer" class="wide" placeholder="Answer...">
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <footer id="footer">                        
+        <button id="next-button">Next Question >></button>
+      </footer>
+
+    </section>
+
+    <footer id="info">
+      <p><a id="backtomenu" href="menuStudent.html">Back to Main Menu</a></p>
+      <p>CSC2001F Assignment 7</p>
+    </footer>
+
+    <script src="static/js/jquery.js"></script>
+
+    <script>
+      /* We have to wait until the document is ready before executing javascript */
+      $(document).ready(function() {
+
+        window.i = 0;
+
+        $('#next-button').click(function(e) {
+          // Prevent the button from attempting to submit anything
+          e.preventDefault();
+
+          // Get the current question number
+          var qid = $('#question_number').text(),
+              answer = $('#answer').val();
+
+          answer_question(answer);
+
+        });
+
+        function answer_question(answer) {
+
+          window.i++;
+          var qid = $('#question_number').text().split('.')[0];
+          /*
+          post_json('/answer_question', {qid: qid, answer: answer} )
+            .done( function(result) {
+              handle_response(result);
+            })
+
+            .fail( function(result) {
+              console.log('There was an error posting the answer.');
+            });          
+          */
+          if(window.i == 1 || answer == 'C') {
+            handle_response({iscorrect: 1});
+          } else {
+            handle_response({iscorrect: 0});
+          }
+
+        };
+
+        /**
+       * Function to perform a generic $.ajax POST request to the flask server
+       * It always sends and receives json data.
+       * @param url, the trailing url string for the route, ignore http://localhost:port
+       * @param data, the json data object to be posted
+       * @param proceed, the callback function which will be called when the server responds the post
+       **/
+      var post_json = function(url, json_data) {
+
+        return $.ajax({
+                  type: 'POST',
+                  url: 'http://localhost:5000/' + url,
+                  data: JSON.stringify( json_data ),
+                  contentType:"application/json; charset=utf-8",
+                  dataType: 'json'
+                });
+      };
+
+      var handle_response = function(data) {
+
+        if(data.iscorrect == 1) {
+          var ans = $('#answer');
+          $('#main').css('background', '#C4F1C4');
+          setTimeout(function() {
+            getNextQuestion();
+          }, 1000);
+        } else if(data.iscorrect == 0) {
+          displayIncorrect();
+        }
+
+      };
+
+      var getNextQuestion = function() {
+
+        var qid = $('#question_number').text().split('.')[0]
+        /*
+        post_json('/get_question', {current_qid: qid})
+          .done( function(result) {
+            setNextQuestion(result);
+          })
+
+          .fail( function(result) {
+            console.log('Error getting next question');
+          });
+        */
+        
+        if (window.i == 1) {
+          setNextQuestion({
+            qid: '35', 
+            type: 'MCQ', 
+            question: 'this is a MCQ?',
+            A: 'Option A',
+            B: 'Option B',
+            C: 'Option C',
+            D: 'Option D'
+          });
+        } else {
+          setNextQuestion({qid: 9, type: 'WordQ', question: 'What is this?'});
+        }
+      };
+
+      var setNextQuestion = function(data) {
+
+        // maintain the current height
+        var container = $('#main'),
+            ac = $('#answer-container'),
+            answer = $('#answer'),
+            question = $('#question'),
+            qid = $('#question_number');
+
+        $('#main').css('background', '#fff');
+
+        ac.css('opacity', 0);
+        qid.css('opacity', 0);
+
+        setTimeout(function() {
+
+          question.css('opacity', 0);
+
+          // hide the question and answer field
+          ac.slideUp(350, function() {
+
+            // empty out the answer block
+            // because we don't know if we're getting
+            // an MCQ or word question.
+            ac.children().detach();
+
+            // reset the question
+            question.text( data.question );
+            qid.text( data.qid + '.' );
+
+            // reset the answer
+            if (data.type == 'WordQ') {
+
+              ac.append('<div class="view"><input id="answer" class="wide" placeholder="Answer..."></div>');
+
+              $('#next-button').css('display', 'block');
+
+            } else if (data.type == 'MCQ') {
+
+              var mcq_tpl = '<div class="view mcq A"><input class="toggle" type="radio" name="question"><label data-letter="A"></label></div>';
+
+              mcq_tpl += '<div class="view mcq B"><input class="toggle" type="radio" name="question"><label data-letter="B"></label></div>';
+
+              mcq_tpl += '<div class="view mcq C"><input class="toggle" type="radio" name="question"><label data-letter="C"></label></div>';
+
+              mcq_tpl += '<div class="view mcq D"><input class="toggle" type="radio" name="question"><label data-letter="D"></label></div>';
+
+              ac.append(mcq_tpl);
+              $('#next-button').css('display', 'none');
+
+              // bind submitting the answer to label clicks
+              ac.find('label').click(function() { 
+                var answer = $(this).attr('data-letter');
+                answer_question(answer);
+              });
+
+              // set the MCQ labels
+              ac.find('.A label').text( data.A );
+              ac.find('.B label').text( data.B );
+              ac.find('.C label').text( data.C );
+              ac.find('.D label').text( data.D );
+
+            }
+
+            // reveal the new question
+            ac.slideDown(350, function() {
+
+              // display the new question
+              qid.css('opacity', '1');
+              question.css('opacity', '1');
+              answer.css('background', 'rgba(255, 255, 255, 0)');
+              ac.css('opacity', '1');                  
+
+            }); // slide down
+
+
+          }); // slide up
+        }, 500); // end setTimeout
+
+      };
+
+      var displayIncorrect = function() {
+        var main = $('#main');
+        main.css('background', '#FFB5B5');
+        setTimeout(function() {
+          main.css('background', '#fff');
+        }, 1500);
+      }; 
+
+    });
+    </script>
+    
+  </body>
+</html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>[Title goes here]</title>
+    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/app.css">
+  </head>
+
+  <body id="full">
+
+    <section id="logo">
+      <img src="static/img/logo-icon.png" />
+    </section>
+
+    <section id="todoapp">            
+
+      <section id="main">
+        <ul id="todo-list">
+          <li>
+            <div class="view">
+              <label><span id="question_number">1.</span> <span id="question">The term used for the row of a relation is a?</span></label>              
+            </div>
+          </li>
+          <li>
+            <div class="view">
+              <label id="answer">Blue sheep</label>              
+            </div>
+          </li>
+          <li>
+            <div class="view">
+              <input id="rating" class="wide" placeholder="Rating (0-100)...">
+            </div>
+          </li>
+          <li>
+            <div class="view">
+              <input id="reason" class="wide" placeholder="Reason...">
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <footer id="footer">                        
+        <button id="next-button">Submit Rating >></button>
+      </footer>
+
+    </section>
+
+    <footer id="info">
+      <p><a id="backtomenu" href="menuStudent.html">Back to Main Menu</a></p>
+      <p>CSC2001F Assignment 7</p>
+    </footer>
+
+    <script src="static/js/jquery.js"></script>
+
+    <script>
+      /* We have to wait until the document is ready before executing javascript */
+      $(document).ready(function() {
+
+        $('#next-button').click(function(e) {
+          // Prevent the button from attempting to submit anything
+          e.preventDefault();
+
+          // get the ratings
+          var qid = $('#question_number').text().split('.')[0],
+              rating = $('#rating').val();
+              reason = $('#reason').val();
+
+          // send ratings
+          send_ratings({
+            qid: qid, 
+            rating: rating, 
+            reason: reason
+          });
+
+        });
+
+        function send_ratings(data) {
+
+          /*
+          post_json('/rate_question', data )
+            .done( function(result) {
+              handle_response(result);
+            })
+
+            .fail( function(result) {
+              console.log('There was an error posting the answer.');
+            });          
+          */
+            handle_response();
+
+        };
+
+        /**
+       * Function to perform a generic $.ajax POST request to the flask server
+       * It always sends and receives json data.
+       * @param url, the trailing url string for the route, ignore http://localhost:port
+       * @param data, the json data object to be posted
+       * @param proceed, the callback function which will be called when the server responds the post
+       **/
+      var post_json = function(url, json_data) {
+
+        return $.ajax({
+                  type: 'POST',
+                  url: 'http://localhost:5000/' + url,
+                  data: JSON.stringify( json_data ),
+                  contentType:"application/json; charset=utf-8",
+                  dataType: 'json'
+                });
+      };
+
+      var handle_response = function() {
+
+        $('#main').css('background', '#C4F1C4');
+
+        setTimeout(function() {
+          getNextQuestion();
+        }, 1000);
+
+      };
+
+      var getNextQuestion = function() {
+
+        var qid = $('#question_number').text().split('.')[0];
+        /*
+        post_json('/rate_question', {current_qid: qid})
+          .done( function(result) {
+            setNextQuestion(result);
+          })
+
+          .fail( function(result) {
+            console.log('Error getting next question');
+          });
+        */
+        
+        setNextQuestion({
+          qid: '35', 
+          question: 'this is a MCQ?',
+          answer: 'No', 
+        });
+
+      };
+
+      var setNextQuestion = function(data) {
+
+        // maintain the current height
+        var container = $('#main'),
+
+            answer = $('#answer'),
+            question = $('#question'),
+            qid = $('#question_number'),
+            rating = $('#rating'),
+            reason = $('#reason');
+
+        $('#main').css('background', '#fff');
+
+        container.css('opacity', 0);
+
+        setTimeout(function() {
+
+            // reset the question
+            question.text( data.question );
+            qid.text( data.qid + '.' );
+            answer.text( data.answer );
+            rating.val('');
+            reason.val('');
+
+            // display the new question
+            container.css('opacity', '1');
+
+        }, 1000);
+
+      };
+
+    });
+    </script>
+    
+  </body>
+</html>

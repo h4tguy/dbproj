@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>[Title goes here]</title>
+    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/app.css">
+  </head>
+
+  <body id="full">
+
+    <section id="logo">
+      <img src="static/img/logo-icon.png" />
+    </section>
+
+    <section id="todoapp">            
+
+      <section id="main">
+        <ul id="todo-list">          
+          <li class="student_results headers">
+            <div class="view">
+              <label class="long">Question</label>
+              <label>Correct</label>
+              <label>Incorrect</label>
+              <label>Rating</label>
+            </div>
+          </li>
+          <li>
+            <div class="view">
+              <input id="studentno" class="wide" placeholder="Enter student number...">
+              <button id="request-button">Request >></button>
+            </div>
+          </li>          
+        </ul>
+      </section>
+
+      <footer id="footer">                        
+        <button id="delete-questions">Delete X</button>
+      </footer>
+
+    </section>
+
+    <footer id="info">
+      <p><a id="backtomenu" href="menuStudent.html">Back to Main Menu</a></p>
+      <p>CSC2001F Assignment 7</p>
+    </footer>
+
+    <script src="static/js/jquery.js"></script>
+
+    <script>
+      /* We have to wait until the document is ready before executing javascript */
+      $(document).ready(function() {
+
+        $('#request-button').click(function(e) {
+          // Prevent the button from attempting to submit anything
+          e.preventDefault();
+
+          // Get the current question number
+          var studentno = $('#studentno').val();
+          request_results({studentno: studentno});
+
+        });
+
+        function request_results(data) {
+          /*
+          var student_number = $('#studentno').val();
+          post_json('/performance/' + student_number)
+            .done( function(result) {
+              handle_response(result);
+            })
+
+            .fail( function(result) {
+              console.log('There was an error posting the answer.');
+            });          
+          */
+          handle_response({
+            questions: [{
+              qid: '35',
+              question: 'Question One',
+              correct: '4',
+              incorrect: '743',
+              grade: '0.98'  
+            }, {
+              qid: '76',
+              question: 'Question Two',
+              correct: '11',
+              incorrect: '523',
+              grade: '0.23'  
+            }, {
+              qid: '93',
+              question: 'Question Three',
+              correct: '45',
+              incorrect: '179',
+              grade: '0.7'  
+            }, {
+              qid: '198',
+              question: 'Question Four',
+              correct: '73',
+              incorrect: '34',
+              grade: '0.65'  
+            }]
+          });
+
+        };
+
+        /**
+       * Function to perform a generic $.ajax POST request to the flask server
+       * It always sends and receives json data.
+       * @param url, the trailing url string for the route, ignore http://localhost:port
+       * @param data, the json data object to be posted
+       * @param proceed, the callback function which will be called when the server responds the post
+       **/
+      var post_json = function(url, json_data) {
+
+        return $.ajax({
+                  type: 'POST',
+                  url: 'http://localhost:5000/' + url,
+                  data: JSON.stringify( json_data ),
+                  contentType:"application/json; charset=utf-8",
+                  dataType: 'json'
+                });
+      };
+
+      var handle_response = function(data) {
+
+        $('#studentno').css('background', '#C4F1C4');
+        setTimeout(function() {
+
+          populateResults(data);
+
+        }, 1000);
+
+      };      
+
+      var populateResults = function(data) {
+
+        // maintain the current height
+        var container = $('#main'),
+            question_results = $('.question_results.values');
+
+        $('#studentno').css('background', '#fff');
+
+        question_results.css('opacity', 0);
+
+        setTimeout(function() {
+
+          // remove existing questions
+          if( question_results.length > 0 ) {
+            $.each( question_results, function(i, li) {
+              $(li).detach();
+            }); 
+          };
+
+
+          var container = $('#todo-list');
+          $.each( data.questions, function(i, data) {
+
+            // build the new ones
+            var tpl = '<li class="question_results values">';
+                tpl += '<div class="view">';
+                tpl += '<label class="long"><span class="qid">' + data.qid + '</span>' + data.question + '</label>';
+                tpl += '<label>' + data.correct + '</label>';
+                tpl += '<label>' + data.incorrect + '</label>';
+                tpl += '<label>' + data.grade + '</label>';
+                tpl += '</div>';
+                tpl += '</li>';
+
+            container.append(tpl);
+
+            // bind the 'removing' action
+            $('.question_results.values').click(function() {
+              console.log(this);
+              if ( $(this).hasClass('deleted') ) {
+                $(this).addClass('added');
+              }
+
+              $(this).addClass('deleted');
+              // activate the delete button
+              $('#delete-questions').css('display', 'block');
+              $('#delete-questions').click(delete_questions);
+
+            });
+
+          }); // end foreach
+
+          setTimeout(function() {
+
+            $('#studentno').val('');
+
+            // display the new question
+            question_results.css('opacity', '1');
+
+          }, 500); // end setTimeout
+
+        }, 1000); // end setTimeout
+
+      };
+
+      var delete_questions = function() {
+        var deleted = $('.deleted .qid');
+        var obj = {qids: []};
+
+        $.each( deleted, function(i, q) {
+          obj.qids.push( $(q).text() );
+        });
+
+        console.log(obj);
+        /*
+        post_json('/remove_question/' + qid )
+          .done( function(result) {
+            handle_response(result);
+          })
+
+          .fail( function(result) {
+            console.log('There was an error posting the answer.');
+          });          
+        */
+
+      }
+
+    });
+    </script>
+    
+  </body>
+</html>

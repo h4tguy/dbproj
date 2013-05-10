@@ -1,6 +1,0 @@
-{
-  "jspm": {
-    "baseUrl": "templates/lib",
-    "configPath": "templates/config.js"
-  }
-}

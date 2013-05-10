@@ -1,0 +1,186 @@
+/* Login or short page */
+#login {
+  width: 540px;
+}
+#logo {
+  margin-top: 20px;
+  text-align: center;
+  min-height: 335px;
+}
+#login #todoapp {
+  margin-top: 20px;
+}
+#register-button {
+  float: left;
+}
+#login-button, #register-button, #next-button, #request-button, #delete-questions {
+  color: #FFF;
+  background: #8d7d77;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(132, 110, 100, 0.8)),to(rgba(101, 84, 76, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -moz-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -o-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -ms-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#9d8b83', EndColorStr='#847670');
+}
+#login-button:hover, #register-button:hover, #next-button:hover, #request-button:hover, #delete-questions:hover {
+  background: #8d7d77;
+  color: #CCC;
+}
+
+/* Full width pages */
+#full {
+  width: 960px;
+}
+
+#full #todoapp {
+  margin-top: 30px;
+}
+
+.view input.plain {
+  border: 0;
+  position: relative;
+  margin: 0;
+  width: 100%;
+  font-size: 24px;
+  font-family: inherit;
+  line-height: 1.4em;
+  border: 0;
+  outline: none;
+  color: inherit;
+  padding: 6px;
+  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -ms-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+#full #todo-list li input.wide {
+  background: rgba(255, 255, 255, 0);
+  border: 0;
+  width: 913px;
+  margin-left: 45px;
+  width: 100%;
+  font-size: 24px;
+  font-family: inherit;
+  line-height: 1.4em;
+  outline: none;
+  color: inherit;
+  padding: 6px;
+  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -ms-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+#question_number, #answer-container, #question, .student_results.values, .question_results.values {
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s; 
+}
+
+.view.mcq {
+  width: 49.5%;
+  float: left;
+  position: relative;
+}
+
+#todo-list li {
+  overflow: hidden;
+}
+
+#todo-list li .A .toggle:after {
+  content: 'A';
+}
+#todo-list li .B .toggle:after {
+  content: 'B';
+}
+#todo-list li .C .toggle:after {
+  content: 'C';
+}
+#todo-list li .D .toggle:after {
+  content: 'D';
+}
+
+
+#todo-list a {
+  color: #4D4D4D;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 15px 0 15px 65px;
+}
+#todo-list a:hover {
+  background: #D14B4B;
+  color: #FFF;
+}
+
+#todo-list .student_results.headers {
+  background: #D14B4B;
+  color: #FFF;
+}
+#todo-list .student_results.headers label {
+  border: 0;
+}
+#todo-list .student_results label, #todo-list .question_results label {
+  width: 13%;
+  display: block;
+  float: left;
+  padding: 15px;
+  margin: 0;
+  border-left: 1px solid #CCC;
+}
+#todo-list .student_results .long, #todo-list .question_results .long {
+  width: 40%;
+  margin-left: 45px;
+  border-left: 0;
+}
+
+.question_results .qid {
+  margin-left: -54px;
+  margin-right: 54px;
+  font-size: 18px;
+}
+
+#full #todo-list li input#studentno {
+  width: 724px;
+  float: left;
+}
+#request-button {
+  line-height: 47px;
+  width: 188px;
+  color: #FFF;
+  font-size: 18px;
+  background: #6F916F;
+}
+#request-button:hover {
+  background: #466B46;
+}
+
+.deleted label {
+  text-decoration: line-through;
+  color: #999;
+}
+
+#delete-questions {
+  display: none;
+  padding: 15px;
+}

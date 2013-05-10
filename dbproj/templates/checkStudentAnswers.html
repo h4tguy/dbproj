@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>[Title goes here]</title>
+    <link rel="stylesheet" href="static/css/base.css">
+    <link rel="stylesheet" href="static/css/app.css">
+  </head>
+
+  <body id="full">
+
+    <section id="logo">
+      <img src="static/img/logo-icon.png" />
+    </section>
+
+    <section id="todoapp">            
+
+      <section id="main">
+        <ul id="todo-list">          
+          <li class="student_results headers">
+            <div class="view">
+              <label class="long">Name</label>
+              <label>Correct</label>
+              <label>Incorrect</label>
+              <label>Grade</label>
+            </div>
+          </li>
+          <li>
+            <div class="view">
+              <input id="studentno" class="wide" placeholder="Enter student number...">
+              <button id="request-button">Request >></button>
+            </div>
+          </li>
+          <li class="student_results values">
+            <div class="view">
+              <label id="name" class="long">-</label>
+              <label id="correct">-</label>
+              <label id="incorrect">-</label>
+              <label id="grade">-</label>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <footer id="footer">                        
+        
+      </footer>
+
+    </section>
+
+    <footer id="info">
+      <p><a id="backtomenu" href="menuStudent.html">Back to Main Menu</a></p>
+      <p>CSC2001F Assignment 7</p>
+    </footer>
+
+    <script src="static/js/jquery.js"></script>
+
+    <script>
+      /* We have to wait until the document is ready before executing javascript */
+      $(document).ready(function() {
+
+        $('#request-button').click(function(e) {
+          // Prevent the button from attempting to submit anything
+          e.preventDefault();
+
+          // Get the current question number
+          var studentno = $('#studentno').val();
+          request_results({studentno: studentno});
+
+        });
+
+        function request_results(data) {
+          /*
+          post_json('/answer_question', {qid: qid, answer: answer} )
+            .done( function(result) {
+              handle_response(result);
+            })
+
+            .fail( function(result) {
+              console.log('There was an error posting the answer.');
+            });          
+          */
+          handle_response({
+            name: 'Jonathan Davis',
+            correct: '45',
+            incorrect: '179',
+            grade: '0.17'
+          });
+
+        };
+
+        /**
+       * Function to perform a generic $.ajax POST request to the flask server
+       * It always sends and receives json data.
+       * @param url, the trailing url string for the route, ignore http://localhost:port
+       * @param data, the json data object to be posted
+       * @param proceed, the callback function which will be called when the server responds the post
+       **/
+      var post_json = function(url, json_data) {
+
+        return $.ajax({
+                  type: 'POST',
+                  url: 'http://localhost:5000/' + url,
+                  data: JSON.stringify( json_data ),
+                  contentType:"application/json; charset=utf-8",
+                  dataType: 'json'
+                });
+      };
+
+      var handle_response = function(data) {
+
+        $('#studentno').css('background', '#C4F1C4');
+        setTimeout(function() {
+
+          populateResults(data);
+
+        }, 1000);
+
+      };      
+
+      var populateResults = function(data) {
+
+        // maintain the current height
+        var container = $('#main'),
+            student_results = $('.student_results.values'),
+            name = $('#name');
+            correct = $('#correct');
+            incorrect = $('#incorrect');
+            grade = $('#grade');
+
+        $('#studentno').css('background', '#fff');
+
+        student_results.css('opacity', 0);
+
+        setTimeout(function() {
+
+          // reset the question
+          name.text( data.name );
+          correct.text( data.correct );
+          incorrect.text( data.incorrect );
+          grade.text( data.grade );
+          $('#studentno').val('');
+
+          // display the new question
+          student_results.css('opacity', '1');
+
+        }, 500); // end setTimeout
+
+      };
+
+    });
+    </script>
+    
+  </body>
+</html>
