@@ -36,9 +36,11 @@ def get_q(username, for_rating=False):
 
 	ans=Question()
 	ans.ans=res[2]
-	ans.body=reduce(lambda x,y: str(x)+"\n"+str(y),[str(i[0])+" "+str(i[1]) for i in mcq],res[1])
-	ans.qno=int(res[0])
+	ans.body = res[1]
+	ans.qno = int(res[0])
 	ans.qtype = get_q_type(ans.qno)
+
+	ans.mcq = dict((x[0], x[1]) for x in mcq)
 
 	return ans
 

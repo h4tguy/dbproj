@@ -98,13 +98,13 @@
 
       var handle_response = function(data) {
 
-        if(data.correct == 1) {
+        if (data.correct == 1) {
           var ans = $('#answer');
           $('#main').css('background', '#C4F1C4');
 		  setTimeout(function() {
 			getNextQuestion();
 		  }, 1000);
-        } else if(data.correct == 0) {
+        } else if (data.correct == 0) {
           displayIncorrect();
         }
 
@@ -149,6 +149,7 @@
             // because we don't know if we're getting
             // an MCQ or word question.
             ac.children().detach();
+			console.log(data);
 
             // reset the question
             question.text( data.question );
@@ -162,14 +163,11 @@
               $('#next-button').css('display', 'block');
 
             } else if (data.type == 'MCQ') {
+		      var mcq_tpl = '';
 
-              var mcq_tpl = '<div class="view mcq A"><input class="toggle" type="radio" name="question"><label data-letter="A"></label></div>';
-
-              mcq_tpl += '<div class="view mcq B"><input class="toggle" type="radio" name="question"><label data-letter="B"></label></div>';
-
-              mcq_tpl += '<div class="view mcq C"><input class="toggle" type="radio" name="question"><label data-letter="C"></label></div>';
-
-              mcq_tpl += '<div class="view mcq D"><input class="toggle" type="radio" name="question"><label data-letter="D"></label></div>';
+			  for (var name in data.mcq) {
+				  mcq_tpl += '<div class="view mcq '+name+'"><input class="toggle" type="radio" name="question"><label data-letter="'+data.mcq[name]+'"></label></div>';
+			  }
 
               ac.append(mcq_tpl);
               $('#next-button').css('display', 'none');
@@ -181,11 +179,10 @@
               });
 
               // set the MCQ labels
-              ac.find('.A label').text( data.A );
-              ac.find('.B label').text( data.B );
-              ac.find('.C label').text( data.C );
-              ac.find('.D label').text( data.D );
-
+			  for (var name in data.mcq) {
+				  var q = data.mcq[name];
+				  ac.find('.'+name+' label').text(q);
+			  }
             }
 
             // reveal the new question

@@ -25,7 +25,7 @@ def index():
 @app.route('/get_question', methods=['POST', 'GET'])
 def get_question():
 	question = session['curr_q'] = get_q(session['username'])
-	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype})
+	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype, 'mcq':question.mcq})
 
 @app.route('/answer_question', methods=['POST', 'GET'])
 def answer_question():
