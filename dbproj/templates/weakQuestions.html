@@ -18,24 +18,26 @@
     <section id="todoapp">            
 
       <section id="main">
-        <ul id="todo-list">          
+        <ul id="todo-list" class="score-questions">          
           <li class="test_row headers">
             <div class="view">
               <label class="long">Question</label>
-              <label>Answer</label>
+              <label>QNo</label>
+              <label>Right Ans</label>
             </div>
           </li>
           <li class="test_row values">
             <div class="view">
               <label class="question long">-</label>
-              <label class="answer">-</label>
+              <label class="qno">-</label>
+              <label class="rightans">-</label>
             </div>
           </li>
         </ul>
       </section>
 
       <footer id="footer">                        
-        
+        <button id="delete-questions">Mark as Useless</button> 
       </footer>
 
     </section>
@@ -53,7 +55,7 @@
       $(document).ready(function() {
 
         function populate_classlist() {
-          post_json('/make_test', {} )
+          post_json('/check_weak_questions', {} )
             .done( function(result) {
               handle_response(result);
             })
@@ -95,24 +97,68 @@
 
         // maintain the current height
         var container = $('#main ul'),
-            test_rows = $('.test_row.values'),
-            question = $('#question');
-            answer = $('#answer');
+            q_rows = $('.test_row.values'),
+            question = $('.question');
+            qno = $('.qno');
+            rightans = $('.rightans');
 
-        test_rows.css('opacity', 0);
+        q_rows.css('opacity', 0);
 
-		if (d.data.length != 0) {
+		if (d.diff_data.length != 0) {
 			container.find('.values').detach();
 		}
 
-		for (var i in d.data) {
-			var test_row = d.data[i];
+		for (var i in d.diff_data) {
+			var q_row = d.diff_data[i];
 			console.log(question);
-			var row = '<li class="test_row values"><div class="view"><label class="question long">'+test_row.question+'</label>'+
-				'<label class="answer">'+test_row.answer+'</label></div></li>';
+			var row = '<li class="test_row values ' + ( (q_row.useless) ? 'deleted' : '' )  + '"><div class="view"><label class="question long">'+q_row.question+'</label>'+
+                '<label class="qno">'+q_row.qno+'</label><label class="rightans">'+q_row.rightans+'</label></div></li>';
 			container.append(row);
 		}
 
+          $.each( d.diff_data, function(i, data) {
+
+            var el = $('.test_row.values').get(i);
+
+            // bind the 'removing' action
+            $(el).click(function() {
+                console.log($(el)); 
+              if ( $(el).hasClass('deleted') ) {
+                  console.log('has deleted...');
+                $(el).removeClass('deleted');
+            } else {
+                console.log('adding class...');
+              $(el).addClass('deleted');
+            }
+              // activate the delete button
+              $('#delete-questions').css('display', 'block');
+              $('#delete-questions').click(delete_questions);
+
+            });
+
+          });
+
+      };
+      var delete_questions = function() {
+        var questions = $('.test_row.values');
+        var obj = {qids: []};
+
+        $.each( questions, function(i, q) {
+            
+            var el = $('.test_row.values').get(i);
+
+            var qno = $(el).find('.qno').text(),
+                useless = $(el).hasClass('deleted');
+            obj.qids.push( {qno: qno, useless: useless} );
+        });
+
+        post_json('/update_weak_questions', obj.qids )
+          .done( function(result) {
+          })
+
+          .fail( function(result) {
+            console.log('There was an error posting the answer.');
+          });          
       };
 
       populate_classlist();

@@ -27,9 +27,17 @@ def index():
 def answerQuestionPage():
         return render_template('answerQuestionPage.html')
 
-@app.route('/generateTest')
+@app.route('/generateTest', methods=['POST', 'GET'])
 def generate_test():
 	return render_template('generateTest.html')
+
+@app.route('/scoreQuestions',methods=['POST','GET'])
+def score_questions_page():
+	return render_template('scoreQuestions.html')
+
+@app.route('/weakQuestions',methods=['POST','GET'])
+def weak_questions_page():
+	return render_template('weakQuestions.html')
 
 @app.route('/get_question', methods=['POST', 'GET'])
 def get_question():
@@ -86,21 +94,29 @@ def questions():
 def classlist():
 	return json.dumps({'classlist':get_classlist()})
 
-@app.route('/score_questions')
+@app.route('/score_questions', methods=['GET', 'POST'])
 def show_score_questions():
 	return json.dumps({'diff_data':score_questions()})
 
-@app.route('/check_weak_questions')
+@app.route('/check_weak_questions', methods=['POST', 'GET'])
 def show_check_weak_question():
-	return json.dumps({'questions':check_weak_question()})
+	return json.dumps({'diff_data':check_weak_questions()})
 
-@app.route('/update_weak_questions')
+@app.route('/update_weak_questions', methods=['POST', 'GET'])
 def do_update_weak_questions():
-	data=json.loads(request.data)
-	update_weak_question(data['trues'],data['falses'])
+	data=json.loads(request.data)#['qids']
+	print data
+	trues=[]
+	falses=[]
+	for i in data:
+		if i['useless']:
+			trues.append(i['qno'])
+		else:
+			falses.append(i['qno'])
+	update_weak_question(trues,falses)
 	return "{}"
 
-@app.route('/make_test')
+@app.route('/make_test', methods=['POST', 'GET'])
 def make_test():
 	ans=gen_test()
 	return json.dumps({'data':ans})

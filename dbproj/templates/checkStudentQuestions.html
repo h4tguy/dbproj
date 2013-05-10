@@ -174,23 +174,6 @@
 
           }); // end foreach
 
-          $.each( data.questions, function(i, data) {
-
-            // bind the 'removing' action
-            $('.question_results.values').click(function() {
-              
-              if ( $(this).hasClass('deleted') ) {
-                $(this).removeClass('deleted');
-              }
-
-              $(this).addClass('deleted');
-              // activate the delete button
-              $('#delete-questions').css('display', 'block');
-              $('#delete-questions').click(delete_questions);
-
-            });
-
-          });
 
           setTimeout(function() {
 
@@ -205,22 +188,6 @@
 
       };
 
-      var delete_questions = function() {
-        var deleted = $('.deleted .qid');
-        var obj = {qids: []};
-
-        $.each( deleted, function(i, q) {
-          obj.qids.push( $(q).text() );
-        });
-
-        post_json('/remove_question/' + qid )
-          .done( function(result) {
-            handle_response(result);
-          })
-
-          .fail( function(result) {
-            console.log('There was an error posting the answer.');
-          });          
 
       }
 

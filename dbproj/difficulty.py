@@ -43,19 +43,19 @@ def update_scores():
 
 def score_questions():
 	update_scores()
-	c = g.db.cursor()
+	cur = g.db.cursor()
 	cur.execute('''select qno, question, rightanswer,difficulty from questions''')
 	questions=cur.fetchall()
 	cur.execute('select qno,letter,answer from mcqans order by letter')
 	anses=cur.fetchall()
-	c.close()
+	cur.close()
 	qdict=dict()
 	for i in questions:
-		qdict[i[0]]=i[1:4]
-		qdict[i[0]][2]=Difficulty.get(i[3])
+		qdict[i[0]]=list(i[1:4])
+		qdict[i[0]][2]=Difficulty.diffs[i[3]]
 	for i in anses:
 		qdict[i[0]][0]=qdict[i[0]][0]+" "+i[1]+") "+i[2]
-	return [[i]+qdict[i] for i in qdict]
+	return [{'qno':i,'question':qdict[i][0],'rightans':qdict[i][1],'difficulty':qdict[i][2]} for i in qdict]
 
 
 def check_weak_questions():
@@ -67,19 +67,28 @@ def check_weak_questions():
 	anses=cur.fetchall()
 	qs=dict()
 	for i in res:
-		qs[i[0]]=i[1:4]
-		qs[i[0]][2]=int(qs[i[0]][2])
+		qs[i[0]]=list(i[1:4])
 	for i in anses:
 		qs[i[0]][0]+=" "+i[1]+") "+i[2]
 	cur.close()
-	return [[i]+qs[i] for i in qdict]
+	return [{'qno':i,'question':qs[i][0],'rightans':qs[i][1],'useless':qs[i][2]} for i in qs]
+
+def sqlify(x):
+	if len(x)==0:
+		return ""
+	if len(x)==1:
+		return "(%s)"%x[0]
+	return str(tuple(map(int,x)))
 
 def update_weak_question(trues, falses):
-	trues=tuple(trues)
-	falses=tuple(falses)
+	print trues,falses
+	trues=sqlify(trues)
+	falses=sqlify(falses)
 	cur = g.db.cursor()
-	cur.execute('''update questions set useless=true where qno in %s'''% str(trues))
-	cur.execute('''update questions set useless=false where qno in %s'''%str(falses))
+	if len(trues)>0:
+		cur.execute('''update questions set useless=true where qno in %s'''% trues)
+	if len(falses)>0:
+		cur.execute('''update questions set useless=false where qno in %s'''%falses)
 	cur.close()
 	g.db.commit()
 	return True

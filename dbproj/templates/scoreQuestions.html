@@ -18,17 +18,21 @@
     <section id="todoapp">            
 
       <section id="main">
-        <ul id="todo-list">          
+        <ul id="todo-list" class="score-questions">          
           <li class="test_row headers">
             <div class="view">
               <label class="long">Question</label>
-              <label>Answer</label>
+              <label>QNo</label>
+              <label>Right Ans</label>
+              <label>Difficulty</label>
             </div>
           </li>
           <li class="test_row values">
             <div class="view">
               <label class="question long">-</label>
-              <label class="answer">-</label>
+              <label class="qno">-</label>
+              <label class="rightans">-</label>
+              <label class="difficulty">-</label>
             </div>
           </li>
         </ul>
@@ -53,7 +57,7 @@
       $(document).ready(function() {
 
         function populate_classlist() {
-          post_json('/make_test', {} )
+          post_json('/score_questions', {} )
             .done( function(result) {
               handle_response(result);
             })
@@ -95,21 +99,23 @@
 
         // maintain the current height
         var container = $('#main ul'),
-            test_rows = $('.test_row.values'),
-            question = $('#question');
-            answer = $('#answer');
+            q_rows = $('.test_row.values'),
+            question = $('.question');
+            qno = $('.qno');
+            rightans = $('.rightans');
+            difficulty = $('.difficulty');
 
-        test_rows.css('opacity', 0);
+        q_rows.css('opacity', 0);
 
-		if (d.data.length != 0) {
+		if (d.diff_data.length != 0) {
 			container.find('.values').detach();
 		}
 
-		for (var i in d.data) {
-			var test_row = d.data[i];
+		for (var i in d.diff_data) {
+			var q_row = d.diff_data[i];
 			console.log(question);
-			var row = '<li class="test_row values"><div class="view"><label class="question long">'+test_row.question+'</label>'+
-				'<label class="answer">'+test_row.answer+'</label></div></li>';
+			var row = '<li class="test_row values"><div class="view"><label class="question long">'+q_row.question+'</label>'+
+                '<label class="qno">'+q_row.qno+'</label><label class="rightans">'+q_row.rightans+'</label><label class="difficulty">'+q_row.difficulty+'</label></div></li>';
 			container.append(row);
 		}
 

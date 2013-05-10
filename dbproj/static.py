@@ -1,9 +1,10 @@
-from flask import render_template
+from flask import render_template, session
 from dbproj import app, answer_q
 
 @app.route('/menu')
 def menuStudent():
-	return render_template('menu.html')
+	print session['user_role']
+	return render_template('menu.html', teacher=int(session['user_role']))
 
 @app.route('/questionsAnswer')
 def answerQuestions():

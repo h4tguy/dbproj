@@ -88,7 +88,7 @@
   font-smoothing: antialiased;
 }
 
-#question_number, #answer-container, #question, .student_results.values, .question_results.values {
+#question_number, #answer-container, #question, .student_results.values, .question_results.values  {
   -webkit-transition: opacity 0.5s;
   -moz-transition: opacity 0.5s;
   -ms-transition: opacity 0.5s;
@@ -133,14 +133,14 @@
   color: #FFF;
 }
 
-#todo-list .student_results.headers {
+#todo-list .headers {
   background: #D14B4B;
   color: #FFF;
 }
-#todo-list .student_results.headers label {
+#todo-list label {
   border: 0;
 }
-#todo-list .student_results label, #todo-list .question_results label {
+#todo-list .student_results label, #todo-list .question_results label, .test_row label {
   width: 13%;
   display: block;
   float: left;
@@ -148,7 +148,10 @@
   margin: 0;
   border-left: 1px solid #CCC;
 }
-#todo-list .student_results .long, #todo-list .question_results .long {
+#todo-list.score-questions .test_row label {
+    width: 8%;
+}
+#todo-list .student_results .long, #todo-list .question_results .long, #todo-list .test_row .long, #todo-list.score-questions .test_row label.long {
   width: 40%;
   margin-left: 45px;
   border-left: 0;
