@@ -94,3 +94,45 @@ questions, varying in difficulty.
 
 List of Files
 =============
+
+AnswerData.csv
+MCQAnsData.csv
+QuestionsData.csv
+README.md
+ratingsData.csv
+requirements.txt
+runInVenv.sh
+runserver.py
+setup.sh
+setupDb.py
+userlist.csv
+dbproj:
+  __init__.py
+  answer_q.py
+  authentication.py
+  config.py
+  db.py
+  difficulty.py
+  get_user_data.py
+  static.py
+  templates:
+    answerQuestionPage.html
+    checkStudentAnswers.html
+    checkStudentQuestions.html, 
+    classList.html
+    generateTest.html
+    index.html
+    menu.html
+    menuStudent.html
+    rateQuestions.html
+  static: 
+    css:
+       app.css
+       base.css
+    img:
+       bg.png
+       logo-icon.png
+    js:
+       app.js
+       jquery.js
+       md5.js
