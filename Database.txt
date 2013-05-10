@@ -20,7 +20,7 @@ Users (Regnum, Salt, HashedPassword, UserType):
 	hashing, the password stored has been hashed, and the UserType determines what privileges the user has 
 	(Student or Teacher). FullName is necessary for when reporting students' results.
 
-Questions:
+Questions & MCQAns:
 	All Questions, MCQ or one-word answer, are stored in Questions (Qno, Question, RightAnswer, SetBy, Useless, Difficulty). In
 	addition, the answers to all the MCQs are stored in MCQAns (Qno, Letter, Answer), where Letter will in general 
 	be one of 'A','B','C' or 'D' but any MCQ is not restricted to having exactly 4 answers.
@@ -33,51 +33,3 @@ Ratings (Qno, Regnum, Points, Reason):
 	A table to store how questions were rated by people. There should be a score from 1 to 5 (points) as well as a 
 	reason for the rating given. The rater?s Regnum is also stored ? should be able to safely assume no one rates 
 	the same question twice.
-
-
-
-
-PSQL to create the tables:
---------------------------
-
-CREATE TABLE Users (
-	Regnum VARCHAR(9) PRIMARY KEY,
-	FullName VARCHAR(50) NOT NULL,
-	Salt VARCHAR (20) NOT NULL,
-	HashedPassword VARCHAR(40),
-	UserType VARCHAR(7) NOT NULL CONSTRAINT ValidUserType CHECK (UserType IN ('student','teacher'))
-);
-
-CREATE TABLE Questions (
-	Qno INTEGER PRIMARY KEY,
-	Question VARCHAR(100) NOT NULL,
-	RightAnswer VARCHAR(20) NOT NULL,
-	SetBy VARCHAR(9) NOT NULL REFERENCES Users (Regnum),
-	Useless BOOLEAN,
-	Difficulty INTEGER CONSTRAINT ValidDifficulty CHECK (Difficulty < 4 AND Difficult >= 0)
-);
-
-CREATE TABLE MCQans (
-	Qno INTEGER REFERENCES Questions (Qno),
-	Letter VARCHAR(1) NOT NULL CONSTRAINT ValidLetter CHECK (Letter IN ('A','B','C','D')),
-	Answer VARCHAR(20) NOT NULL,
-	
-	PRIMARY KEY( Qno, Letter )
-);
-
-CREATE TABLE Answers (
-	Regnum VARCHAR(9) REFERENCES Users (Regnum),
-	Qno INTEGER REFERENCES Questions (Qno),
-	Answer VARCHAR(20),
-
-	PRIMARY KEY( Regnum, Qno )
-);
-
-CREATE TABLE Ratings (
-	Qno INTEGER REFERENCES Questions (Qno),
-	Regnum VARCHAR(9) REFERENCES Users (Regnum),
-	Points INTEGER CONSTRAINT ValidPoints CHECK (Points >=1 AND Points <=5),
-	Reason VARCHAR(50),
-
-	PRIMARY KEY( Qno, Regnum )
-);
