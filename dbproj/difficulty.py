@@ -1,5 +1,5 @@
 class Difficulty:
-	diffs=['Easy','Medium','Difficulty','Unusable']
+	diffs=['Easy','Average','Hard','Unusable']
 	def get(x):
 		return diffs[x]
 def update_scores():
