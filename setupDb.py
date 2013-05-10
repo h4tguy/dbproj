@@ -1,5 +1,6 @@
 from dbproj.db import connect_database
 
+#The following string contains the commands to make all the tables (as specified in the README, with additional constraints that ensure the data entered is valid) if they do not yet exist
 sql = '''CREATE TABLE IF NOT EXISTS Users (
 	Regnum CHAR(9) PRIMARY KEY,
 	FullName VARCHAR(50) NOT NULL,
@@ -42,9 +43,9 @@ CREATE TABLE IF NOT EXISTS Ratings (
 	PRIMARY KEY( Qno, Regnum )
 );'''
 
+#execute the command
 db = connect_database()
 c = db.cursor()
 c.execute(sql)
 c.close()
 db.commit()
-print 'yes?'
