@@ -11,6 +11,7 @@ app = Flask(__name__)
 from authentication import get_salt, requires_auth
 from answer_q import *
 from get_user_data import *
+from difficulty import *
 from db import connect_database
 import static
 
@@ -20,7 +21,15 @@ def initialise():
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+        return render_template('index.html')
+
+@app.route('/answerQuestionPage')
+def answerQuestionPage():
+        return render_template('answerQuestionPage.html')
+
+@app.route('/generateTest')
+def generate_test():
+	return render_template('generateTest.html')
 
 @app.route('/get_question', methods=['POST', 'GET'])
 def get_question():
@@ -29,7 +38,7 @@ def get_question():
 		return json.dumps({'qid': '', 'question': 'Congratulations, you have completed the quiz', 'type': 'MCQ', 'mcq':{}})
 	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype, 'mcq':question.mcq})
 
-@app.route('/answer_question', methods=['POST', 'GET'])
+@app.route('/answerQuestion', methods=['POST', 'GET'])
 def answer_question():
 	question = session['curr_q']
 	correctAnswer = question.ans
@@ -62,16 +71,16 @@ def rate_question():
 	record_rating(session['username'],session['rate_q'].qno,data['rating'],data['reason'])
 	return "{}"
 
-@app.route('/performance')
+@app.route('/performance', methods=['GET', 'POST'])
 def performance():
-	name=json.loads(request.data)['name']
+	name=json.loads(request.data)['studentno']
 	ans=answer_info(name)
-	return json.dumps({'total_answered':ans.total,'total_correct':ans.correct,'details':ans.detail})
+	return json.dumps({'name':ans.name,'total_answered':ans.answered,'total_correct':ans.correct,'details':ans.detail})
 
-@app.route('/questions')
+@app.route('/questions', methods=['GET', 'POST'])
 def questions():
-	name=json.loads(request.data)['name']
-	return json.dumps({'question_info':question_info(name)})
+	studentno=json.loads(request.data)['studentno']
+	return json.dumps({'questions':question_info(studentno)})
 
 @app.route('/classlist', methods=['GET', 'POST'])
 def classlist():
@@ -94,7 +103,7 @@ def do_update_weak_questions():
 @app.route('/make_test')
 def make_test():
 	ans=gen_test()
-	return json.dumps({'questions':ans[0],'answers':ans[1]})
+	return json.dumps({'data':ans})
 
 app.secret_key = ' \xfe#\x9eO\xd1,\xd3\xb14\xfe\xca\x12\xee\xb1\x89\xd9\xf4\xa1[\x0e\xcb\x0f\xe8'
 if __name__ == "__main__":

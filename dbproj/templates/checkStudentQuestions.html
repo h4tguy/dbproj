@@ -43,7 +43,7 @@
     </section>
 
     <footer id="info">
-      <p><a id="backtomenu" href="menuStudent.html">Back to Main Menu</a></p>
+      <p><a id="backtomenu" href="menu.html">Back to Main Menu</a></p>
       <p>CSC2001F Assignment 7</p>
     </footer>
 
@@ -65,9 +65,8 @@
         });
 
         function request_results(data) {
-          /*
           var student_number = $('#studentno').val();
-          post_json('/performance/' + student_number)
+          post_json('questions', {studentno: student_number})
             .done( function(result) {
               handle_response(result);
             })
@@ -75,7 +74,8 @@
             .fail( function(result) {
               console.log('There was an error posting the answer.');
             });          
-          */
+
+        /*
           handle_response({
             questions: [{
               qid: '35',
@@ -103,6 +103,7 @@
               grade: '0.65'  
             }]
           });
+        */
 
         };
 
@@ -164,7 +165,7 @@
                 tpl += '<label class="long"><span class="qid">' + data.qid + '</span>' + data.question + '</label>';
                 tpl += '<label>' + data.correct + '</label>';
                 tpl += '<label>' + data.incorrect + '</label>';
-                tpl += '<label>' + data.grade + '</label>';
+                tpl += '<label>' + data.rating + '</label>';
                 tpl += '</div>';
                 tpl += '</li>';
 
@@ -212,8 +213,6 @@
           obj.qids.push( $(q).text() );
         });
 
-        console.log(obj);
-        /*
         post_json('/remove_question/' + qid )
           .done( function(result) {
             handle_response(result);
@@ -222,7 +221,6 @@
           .fail( function(result) {
             console.log('There was an error posting the answer.');
           });          
-        */
 
       }
 

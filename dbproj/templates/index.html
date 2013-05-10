@@ -153,12 +153,10 @@
       var handle_authentication_status = function(data) {
           if (data.status == 0) {
               // incorrect username or password
-          } else if (data.status == 1) {
-            window.location =  '/menuStudent';
-        } else if (data.status == 2) {
-            window.location =  '/menuTeacher';
-        }
-      }
+              } else {
+            window.location =  '/menu';
+            }
+      };
 
     </script>
 

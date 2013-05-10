@@ -19,26 +19,16 @@
 
       <section id="main">
         <ul id="todo-list">          
-          <li class="student_results headers">
+          <li class="test_row headers">
             <div class="view">
-              <label class="long">Name</label>
-              <label>Correct</label>
-              <label>Incorrect</label>
-              <label>Grade</label>
+              <label class="long">Question</label>
+              <label>Answer</label>
             </div>
           </li>
-          <li>
+          <li class="test_row values">
             <div class="view">
-              <input id="studentno" class="wide" placeholder="Enter student number...">
-              <button id="request-button">Request >></button>
-            </div>
-          </li>
-          <li class="student_results values">
-            <div class="view">
-              <label id="name" class="long">-</label>
-              <label id="correct">-</label>
-              <label id="incorrect">-</label>
-              <label id="grade">-</label>
+              <label class="question long">-</label>
+              <label class="answer">-</label>
             </div>
           </li>
         </ul>
@@ -51,7 +41,7 @@
     </section>
 
     <footer id="info">
-      <p><a id="backtomenu" href="menu.html">Back to Main Menu</a></p>
+      <p><a id="backtomenu" href="menu">Back to Main Menu</a></p>
       <p>CSC2001F Assignment 7</p>
     </footer>
 
@@ -62,18 +52,8 @@
       /* We have to wait until the document is ready before executing javascript */
       $(document).ready(function() {
 
-        $('#request-button').click(function(e) {
-          // Prevent the button from attempting to submit anything
-          e.preventDefault();
-
-          // Get the current question number
-          var studentno = $('#studentno').val();
-          request_results({studentno: studentno});
-
-        });
-
-        function request_results(data) {
-          post_json('/performance', data)
+        function populate_classlist() {
+          post_json('/make_test', {} )
             .done( function(result) {
               handle_response(result);
             })
@@ -102,48 +82,40 @@
       };
 
       var handle_response = function(data) {
+		  console.log(data);
+
         $('#studentno').css('background', '#C4F1C4');
         setTimeout(function() {
-
           populateResults(data);
-
         }, 1000);
 
       };      
 
-      var populateResults = function(data) {
+      var populateResults = function(d) {
 
         // maintain the current height
-        var container = $('#main'),
-            student_results = $('.student_results.values'),
-            name = $('#name');
-            correct = $('#correct');
-            incorrect = $('#incorrect');
-            grade = $('#grade');
+        var container = $('#main ul'),
+            test_rows = $('.test_row.values'),
+            question = $('#question');
+            answer = $('#answer');
 
-        $('#studentno').css('background', '#fff');
+        test_rows.css('opacity', 0);
 
-        student_results.css('opacity', 0);
+		if (d.data.length != 0) {
+			container.find('.values').detach();
+		}
 
-        setTimeout(function() {
-
-          console.log('populating...');
-          console.log(data.name);
-
-          // reset the student data
-          name.text( data.name );
-          correct.text( data.total_correct );
-          incorrect.text( data.total_answered - data.total_correct );
-          grade.text( (data.total_answered != 0) ? (data.total_correct / data.total_answered) : 'N/A' );
-          $('#studentno').val('');
-
-          // display the new question
-          student_results.css('opacity', '1');
-
-        }, 500); // end setTimeout
+		for (var i in d.data) {
+			var question = d.data[i];
+			console.log(question);
+			var row = '<li class="test_row values"><div class="view"><label class="question">'+question[0]+'</label>'+
+				'<label class="answer">'+question[1]+'</label></div></li>';
+			container.append(row);
+		}
 
       };
 
+		populate_classlist();
     });
     </script>
     

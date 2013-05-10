@@ -1,13 +1,9 @@
 from flask import render_template
 from dbproj import app, answer_q
 
-@app.route('/menuStudent')
+@app.route('/menu')
 def menuStudent():
-	return render_template('menuStudent.html')
-
-@app.route('/menuTeacher')
-def menuTeacher():
-	return render_template('menuTeacher.html')
+	return render_template('menu.html')
 
 @app.route('/questionsAnswer')
 def answerQuestions():
