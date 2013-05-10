@@ -4,7 +4,14 @@ from flask import g
 class Question:
 	pass
 
-def get_q_type(qid
+def get_q_type(qid):
+	cur = g.db.cursor()
+
+	cur.execute('select count(*) from mcqans where qno = %s', (qid, ))
+	questionType = 'MCQ' if cur.fetchone()[0] > 0 else 'WordQ'
+	cur.close()
+
+	return questionType
 
 def get_q(username, for_rating=False):
 	cur = g.db.cursor()
@@ -31,6 +38,7 @@ def get_q(username, for_rating=False):
 	ans.ans=res[2]
 	ans.body=reduce(lambda x,y: str(x)+"\n"+str(y),[str(i[0])+" "+str(i[1]) for i in mcq],res[1])
 	ans.qno=int(res[0])
+	ans.qtype = get_q_type(ans.qno)
 
 	return ans
 
