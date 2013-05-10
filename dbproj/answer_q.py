@@ -15,8 +15,7 @@ def get_q(u_name,for_rating=False):
 	cur.execute('select letter,answer from mcqans where qno='+str(res[0]))
 	mcq=cur.fetchall()
 	ans=Question()
-	if(len(res)>2):
-		ans.ans=res[2]
+	ans.ans=res[2]
 	ans.body=reduce(lambda x,y: str(x)+"\n"+str(y),[str(i[0])+" "+str(i[1]) for i in mcq],res[1])
 	ans.qno=res[0]
 	return ans
