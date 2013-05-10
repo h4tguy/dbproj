@@ -46,7 +46,7 @@ def get_question():
 		return json.dumps({'qid': '', 'question': 'Congratulations, you have completed the quiz', 'type': 'MCQ', 'mcq':{}})
 	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype, 'mcq':question.mcq})
 
-@app.route('/answerQuestion', methods=['POST', 'GET'])
+@app.route('/answer_question', methods=['POST', 'GET'])
 def answer_question():
 	question = session['curr_q']
 	correctAnswer = question.ans
@@ -62,7 +62,8 @@ def answer_question():
 	cur.close()
 	g.db.commit()
 
-	return json.dumps({'correct': correctAnswer == userAnswer})
+
+	return json.dumps({'correct': correctAnswer.strip() == userAnswer.strip()})
 
 @app.route('/get_rate_question', methods=['POST'])
 def get_rate_question():
