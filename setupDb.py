@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS Answers (
 CREATE TABLE IF NOT EXISTS Ratings (
 	Qno INTEGER REFERENCES Questions (Qno),
 	Regnum VARCHAR(9) REFERENCES Users (Regnum),
-	Points INTEGER,
+	Points INTEGER CONSTRAINT ValidRatingScore CHECK (Points < 100 AND Points > 0),
 	Reason VARCHAR(50),
 
 	PRIMARY KEY( Qno, Regnum )
