@@ -60,11 +60,11 @@ def record_ans(u_name,qno,ans):
 	return True
 #Records a rating of a question
 def record_rating(u_name,qno,pts,reason):
-    if pts > 100:
-        return False
+	if int(pts) > 100:
+		return False
 	cur = g.db.cursor()
-	cur.execute('''insert into ratings (qno,regnum,points,reason)
-		values (%s,%s,%s,%s)''',(qno,u_name,pts,reason))
+
+	cur.execute('''insert into ratings (qno,regnum,points,reason) values (%s,%s,%s,%s)''',(qno,u_name,pts,reason))
 	cur.close()
 	g.db.commit()
 

@@ -68,6 +68,7 @@ def answer_question():
 @app.route('/get_rate_question', methods=['POST'])
 def get_rate_question():
 	session['rate_q']=get_q(session['username'],True)
+
 	if session['rate_q']:
 		return json.dumps({'question':session['rate_q'].body,'answer':session['rate_q'].ans,'qid':session['rate_q'].qno})
 	return "{}"
