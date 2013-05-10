@@ -125,7 +125,6 @@
       };
 
       var setNextQuestion = function(data) {
-
         // maintain the current height
         var container = $('#main'),
             ac = $('#answer-container'),
@@ -133,11 +132,17 @@
             question = $('#question'),
             qid = $('#question_number');
 
+
+
         $('#main').css('background', '#fff');
 
         ac.css('opacity', 0);
         qid.css('opacity', 0);
 
+	  if (data.qid == -1) {
+		  question.text('Congratulations, you have completed the quiz!');
+		  return;
+	  }
         setTimeout(function() {
 
           question.css('opacity', 0);

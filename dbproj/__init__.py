@@ -26,7 +26,7 @@ def index():
 def get_question():
 	question = session['curr_q'] = get_q(session['username'])
 	if question is None:
-		return json.dumps({'qid': -1})
+		return json.dumps({'qid': '', 'question': 'Congratulations, you have completed the quiz', 'type': 'MCQ', 'mcq':{}})
 	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype, 'mcq':question.mcq})
 
 @app.route('/answer_question', methods=['POST', 'GET'])
