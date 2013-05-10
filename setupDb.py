@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS Ratings (
 	PRIMARY KEY( Qno, Regnum )
 );'''
 
+#execute the command
 db = connect_database()
 c = db.cursor()
 c.execute(sql)
