@@ -9,6 +9,20 @@ Install instructions
 If you're on campus you might wanna set up your HTTP_PROXY environment variable like so:
 HTTP_PROXY="hmdyas001@proxynet.uct.ac.za" ./setup.py
 
+Description
+=======================
+
+This app tests students using student-submitted questions, and reports back students' performance.
+
+Users are able to register accounts and log in. Once logged in, they are displayed a menu:
+
+Students only have permissions to answer questions and to rate questions (ie. indicate how suitable a question is for
+usage). If they opt to answer questions, they are shown questions (both MCQ and One-Word-Answers (OWA)) to answer.
+They are not shown questions they have already answered. They are also able to give any questions a score from 1 to 100
+along with a reason for their rating. Students can also navigate back to the main menu at any point.
+
+
+
 Database Implementation
 =======================
 
