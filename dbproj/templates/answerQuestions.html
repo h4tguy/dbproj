@@ -21,7 +21,7 @@
         <ul id="todo-list">
           <li>
             <div class="view">
-              <label><span id="question_number">1.</span> <span id="question">The term used for the row of a relation is a?</span></label>              
+              <label><span id="question_number"></span> <span id="question"></span></label>              
             </div>
           </li>
           <li id="answer-container">
@@ -121,7 +121,6 @@
       var getNextQuestion = function() {
 
         var qid = $('#question_number').text().split('.')[0]
-        /*
         post_json('/get_question', {current_qid: qid})
           .done( function(result) {
             setNextQuestion(result);
@@ -130,21 +129,6 @@
           .fail( function(result) {
             console.log('Error getting next question');
           });
-        */
-        
-        if (window.i == 1) {
-          setNextQuestion({
-            qid: '35', 
-            type: 'MCQ', 
-            question: 'this is a MCQ?',
-            A: 'Option A',
-            B: 'Option B',
-            C: 'Option C',
-            D: 'Option D'
-          });
-        } else {
-          setNextQuestion({qid: 9, type: 'WordQ', question: 'What is this?'});
-        }
       };
 
       var setNextQuestion = function(data) {
@@ -235,7 +219,7 @@
           main.css('background', '#fff');
         }, 1500);
       }; 
-
+		getNextQuestion();
     });
     </script>
     

@@ -1,5 +1,5 @@
 from flask import render_template
-from dbproj import app
+from dbproj import app, answer_q
 
 @app.route('/menuStudent')
 def menuStudent():

@@ -22,7 +22,7 @@ def initialise():
 def index():
 	return render_template('index.html')
 
-@app.route('/get_question')
+@app.route('/get_question', methods=['POST', 'GET'])
 def get_question():
 	question=session['curr_q']=get_q(session['username'])
 	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype})
