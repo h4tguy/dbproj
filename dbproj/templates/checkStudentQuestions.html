@@ -48,6 +48,7 @@
     </footer>
 
     <script src="static/js/jquery.js"></script>
+    <script src="static/js/app.js"></script>
 
     <script>
       /* We have to wait until the document is ready before executing javascript */
@@ -116,7 +117,7 @@
 
         return $.ajax({
                   type: 'POST',
-                  url: 'http://localhost:5000/' + url,
+                  url: window.domain + url,
                   data: JSON.stringify( json_data ),
                   contentType:"application/json; charset=utf-8",
                   dataType: 'json'
@@ -169,11 +170,16 @@
 
             container.append(tpl);
 
+
+          }); // end foreach
+
+          $.each( data.questions, function(i, data) {
+
             // bind the 'removing' action
             $('.question_results.values').click(function() {
-              console.log(this);
+              
               if ( $(this).hasClass('deleted') ) {
-                $(this).addClass('added');
+                $(this).removeClass('deleted');
               }
 
               $(this).addClass('deleted');
@@ -183,7 +189,7 @@
 
             });
 
-          }); // end foreach
+          });
 
           setTimeout(function() {
 
