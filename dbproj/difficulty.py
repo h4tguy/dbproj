@@ -16,6 +16,7 @@ def update_scores():
 	cur.execute('''update questions inner join (select qno,avg((rightanswer=answer)::int) as ans_rate
 	from questions inner join answers on questions.qno=answers.qno group by qno)
 	set difficulty=0 where ans_rate>0.75''') 
+	#set the difficulty to unusable for any question with average rating below 2
 	cur.execute('''update questions inner join (select qno,avg(points) as score 
 	from questions inner join ratings on questions.qno=ratings.qno group by qno)
 	set difficulty=3 where score<2''') 
@@ -41,10 +42,9 @@ def score_questions():
 
 def check_weak_questions():
 	update_scores()
-	cur.execute('''select distinct questions.qno,question, rightanswer,useless from questions LEFT JOIN ratings ON questions.qno = ratings.qno where (difficulty=3 OR ratings.points=1)''')
+	cur.execute('''select qno,question, rightanswer,useless from questions where difficulty=3''')
 	res=cur.fetchall()
-	cur.execute('''select mcqans.qno,letter,answer from questions inner join mcqans
-	on mcqans.qno=questions.qno, ratings where difficulty=3 OR (ratings.points = 1 AND ratings.qno = questions.qno)''')
+	cur.execute('''select mcqans.qno,letter,answer from questions inner join mcqans	on mcqans.qno=questions.qno where difficulty=3''')
 	anses=cur.fetchall()
 	qs=dict()
 	for i in res:
