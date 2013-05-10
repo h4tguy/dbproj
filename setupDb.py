@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Questions (
 	RightAnswer VARCHAR(20) NOT NULL,
 	SetBy VARCHAR(9) NOT NULL,
 	Useless BOOLEAN,
-	Difficulty VARCHAR(8) CONSTRAINT ValidDifficulty CHECK (Difficulty IN ('easy','average','hard','unusable'))
+	Difficulty INTEGER CONSTRAINT ValidDifficulty CHECK (Difficulty >=0 AND Difficulty <= 3))
 );
 
 CREATE TABLE IF NOT EXISTS MCQans (
