@@ -77,7 +77,7 @@ the same question twice.
 Database Interaction
 ====================
 
-setupDb.py containst the commands that create the database.
+setupDb.py contains the commands that create the database.
 
 db.py returns a connection to the database.
 
