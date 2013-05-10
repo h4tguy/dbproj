@@ -92,6 +92,34 @@ get_user_data.py handles the interaction for reports about a specific student or
 difficulty.py handles setting the difficulty of questions, handling 'weak' questions and generates a test of up to 10 
 questions, varying in difficulty.
 
+
+Notes on how to use the app
+===========================
+
+Answering Questions
+
+ The UI will go green if an answer has been submited successfully and is correct, and red if it is incorrect.  In both of these cases you will be taken to the following question and will not be able to answer it again.
+
+ Word Questions: enter your answer into the input field and press the 'Submit answer' buton
+ MCQ Questions: click on the appropriate option to cast your answer
+ 
+Marking Questions as Useless
+
+ In the Weak Questions menu, with a list of questions loaded, simply click on one of the rows and it will become greyed out with a strikethrough.  A Mark as Weak button will become active on the bottom right from which you can submit the changes to the databases.  Weak questions will automatically be loaded with a strike through and can have the mark removed by clicking it a second time and pressing the button.
+ 
+Viewing a Students score
+
+ Simply enter the students' student number and click the 'Retrieve' button, the student's details will be fetched and populated.
+ 
+Viewing Questions submitted by a user
+
+ Simply enter the students' student number and click the 'Retrieve' button to populate the list with questions which the student has created.
+ 
+Rate a Question
+
+ You will be given a question along with its answer and will be able to enter a rating value between 0 and 100.  larger numbers will be cleared out when the input box loses focus and the submit button will become disabled until the number is valid
+ 
+
 List of Files
 =============
 
@@ -176,34 +204,6 @@ dbproj:
        jquery.js
        
        md5.js
-
-Notes on how to use the app
-===========================
-
-Answering Questions
-
- The UI will go green if an answer has been submited successfully and is correct, and red if it is incorrect.  In both of these cases you will be taken to the following question and will not be able to answer it again.
-
- Word Questions: enter your answer into the input field and press the 'Submit answer' buton
- MCQ Questions: click on the appropriate option to cast your answer
- 
-Marking Questions as Useless
-
- In the Weak Questions menu, with a list of questions loaded, simply click on one of the rows and it will become greyed out with a strikethrough.  A Mark as Weak button will become active on the bottom right from which you can submit the changes to the databases.  Weak questions will automatically be loaded with a strike through and can have the mark removed by clicking it a second time and pressing the button.
- 
-Viewing a Students score
-
- Simply enter the students' student number and click the 'Retrieve' button, the student's details will be fetched and populated.
- 
-Viewing Questions submitted by a user
-
- Simply enter the students' student number and click the 'Retrieve' button to populate the list with questions which the student has created.
- 
-Rate a Question
-
- You will be given a question along with its answer and will be able to enter a rating value between 0 and 100.  larger numbers will be cleared out when the input box loses focus and the submit button will become disabled until the number is valid
- 
-
 
 
 
