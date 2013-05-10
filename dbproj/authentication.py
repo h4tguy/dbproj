@@ -7,11 +7,6 @@ import json
 import hashlib
 from dbproj import app
 
-# not sure if this is necessary anymore, just commenting out for now, sorry - Jarred
-#def make_login_screen(bad=False):
-#pulling out making the login screen to a separate method
-#TODO: templatise this.
-	#return template_lookup.get_template('./temp_login.html').render(bad=bad)
 
 @app.route('/get_salt', methods=['POST'])
 def get_salt():
@@ -92,7 +87,7 @@ def requires_auth(roles):
 			else:
 				if session['user_role'] not in roles:
 					return redirect(url_for('login'))
-			# TODO: add privilage checking here.
+			
 			return f(*args, **kwargs)
 		return decorated
 	return decorator
