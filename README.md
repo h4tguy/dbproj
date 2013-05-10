@@ -6,7 +6,7 @@ Install instructions
 1. Run ./setup.py in your shell
 2. That's it
 
-If you're on campus you might wanna set up your HTTP_PROXY environment variable like so:
+If you're on campus you might want to set up your HTTP_PROXY environment variable like this:
 HTTP_PROXY="hmdyas001@proxynet.uct.ac.za" ./setup.py
 
 Description
@@ -21,7 +21,12 @@ usage). If they opt to answer questions, they are shown questions (both MCQ and 
 They are not shown questions they have already answered. They are also able to give any questions a score from 1 to 100
 along with a reason for their rating. Students can also navigate back to the main menu at any point.
 
-
+Teachers are able to view a class list, reporting back the results of all the students (in terms of how well they did at
+answering questions). They can also view all 'weak' questions - questions which no one answered correctly or that were 
+rated very poorly. They can flag these weak questions as unusable, in which case they will not be asked in the future. 
+They can also view a report on all the questions that have been submitted, check a specific students' performance at 
+answering questions, and check a specific students' questions. Teachers are also given the ability to generate a test 
+of 10 questions, with a certain number of questions of varying levels of difficulty.
 
 Database Implementation
 =======================
