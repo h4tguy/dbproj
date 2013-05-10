@@ -16,16 +16,16 @@ import static
 
 @app.before_request
 def initialise():
-    g.db = connect_database()
+	g.db = connect_database()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+	return render_template('index.html')
 
 @app.route('/get_question')
 def get_question():
 	question=session['curr_q']=get_q(session['username'])
-	return json.dumps({'question':question.body, 'type': question.qtype})
+	return json.dumps({'qid': question.qno, 'question':question.body, 'type': question.qtype})
 
 @app.route('/answer_question')
 def answer_question():
@@ -83,6 +83,6 @@ def make_test():
 
 app.secret_key = ' \xfe#\x9eO\xd1,\xd3\xb14\xfe\xca\x12\xee\xb1\x89\xd9\xf4\xa1[\x0e\xcb\x0f\xe8'
 if __name__ == "__main__":
-    #conn = psycopg.connect("dbname=dbass user=dbass host=hamdulay.co.za")
-    #cur = conn.cursor()
-    app.run()
+	#conn = psycopg.connect("dbname=dbass user=dbass host=hamdulay.co.za")
+	#cur = conn.cursor()
+	app.run()
