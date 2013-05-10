@@ -21,12 +21,12 @@
         <ul id="todo-list">
           <li>
             <div class="view">
-              <label><span id="question_number">1.</span> <span id="question">The term used for the row of a relation is a?</span></label>              
+              <label><span id="question_number"></span> <span id="question"></span></label>              
             </div>
           </li>
           <li>
             <div class="view">
-              <label id="answer">Blue sheep</label>              
+              <label id="answer"></label>              
             </div>
           </li>
           <li>
@@ -49,11 +49,12 @@
     </section>
 
     <footer id="info">
-      <p><a id="backtomenu" href="menuStudent.html">Back to Main Menu</a></p>
+      <p><a id="backtomenu" href="/menuTeacher">Back to Main Menu</a></p>
       <p>CSC2001F Assignment 7</p>
     </footer>
 
-    <script src="static/js/jquery.js"></script>
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/app.js"></script>
 
     <script>
       /* We have to wait until the document is ready before executing javascript */
@@ -70,7 +71,6 @@
 
           // send ratings
           send_ratings({
-            qid: qid, 
             rating: rating, 
             reason: reason
           });
@@ -78,9 +78,7 @@
         });
 
         function send_ratings(data) {
-
-          /*
-          post_json('/rate_question', data )
+          post_json('rate_question', data )
             .done( function(result) {
               handle_response(result);
             })
@@ -88,9 +86,6 @@
             .fail( function(result) {
               console.log('There was an error posting the answer.');
             });          
-          */
-            handle_response();
-
         };
 
         /**
@@ -101,10 +96,9 @@
        * @param proceed, the callback function which will be called when the server responds the post
        **/
       var post_json = function(url, json_data) {
-
         return $.ajax({
                   type: 'POST',
-                  url: window.app + url,
+                  url: window.domain + url,
                   data: JSON.stringify( json_data ),
                   contentType:"application/json; charset=utf-8",
                   dataType: 'json'
@@ -123,24 +117,24 @@
 
       var getNextQuestion = function() {
 
-        var qid = $('#question_number').text().split('.')[0];
-        /*
-        post_json('/rate_question', {current_qid: qid})
+        post_json('/get_rate_question', {})
           .done( function(result) {
-            setNextQuestion(result);
+            if(!result.question) {
+                $('#reason').fadeOut(function() {
+                    $('#rating').fadeOut(function() {
+                        $('#answer').fadeOut(function() {
+                            $('#question').text('There are no more questions to rate.');
+                        })
+                    })
+                });
+            } else {
+                setNextQuestion(result);
+            }
           })
 
           .fail( function(result) {
             console.log('Error getting next question');
           });
-        */
-        
-        setNextQuestion({
-          qid: '35', 
-          question: 'this is a MCQ?',
-          answer: 'No', 
-        });
-
       };
 
       var setNextQuestion = function(data) {
@@ -172,7 +166,9 @@
 
         }, 1000);
 
-      };
+    };
+
+    getNextQuestion();
 
     });
     </script>

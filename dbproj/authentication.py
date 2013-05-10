@@ -88,7 +88,7 @@ def requires_auth(roles):
 		def decorated(*args, **kwargs):
 			# If no username is set, the user is not logged in.
 			if not 'username' in session:
-				return redirect(url_for('login'))
+				abort(500)
 			else:
 				if session['user_role'] not in roles:
 					return redirect(url_for('login'))

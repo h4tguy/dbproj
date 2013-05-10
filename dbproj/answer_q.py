@@ -19,13 +19,13 @@ def get_q_type(qid):
 def get_q(username, for_rating=False):
 	cur = g.db.cursor()
 
-	if for_rating:
+	if not for_rating:
 		cur.execute('''select qno, question, rightanswer  from questions where qno not in
 			(select qno from answers where regnum=%s)  and qno not in (select qno from ratings
 				where regnum=%s) limit 1''',(username,username))
 	else:
 		cur.execute('''select qno, question, rightanswer  from questions where qno not in
-			(select qno from answers where regnum=%s) limit 1''',
+			(select qno from ratings where regnum=%s) limit 1''',
 			(username, ))
 
 	res=cur.fetchone()
@@ -48,14 +48,19 @@ def get_q(username, for_rating=False):
 	return ans
 
 def record_ans(u_name,qno,ans):
-	global cur
+	cur = g.db.cursor()
 	cur.execute('''insert into answers (regnum,qno,answer)
 		values (%s,%s,%s)''',(u_name,qno,ans))
+	cur.close()
+	g.db.commit()
 	return True
 
 def record_rating(u_name,qno,pts,reason):
-	global cur
+	cur = g.db.cursor()
 	cur.execute('''insert into ratings (qno,regnum,points,reason)
 		values (%s,%s,%s,%s)''',(qno,u_name,pts,reason))
+	cur.close()
+	g.db.commit()
+
 	return True
 

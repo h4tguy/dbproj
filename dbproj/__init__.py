@@ -47,17 +47,20 @@ def answer_question():
 
 	return json.dumps({'correct': correctAnswer == userAnswer})
 
-@app.route('/get_rate_question')
+@app.route('/get_rate_question', methods=['POST'])
 def get_rate_question():
 	session['rate_q']=get_q(session['username'],True)
-	return json.dumps({'question':session['rate_q'].body,'answer':session['rate_q'].ans})
+	if session['rate_q']:
+		return json.dumps({'question':session['rate_q'].body,'answer':session['rate_q'].ans,'qid':session['rate_q'].qno})
+	return "{}"
 
-@app.route('/rate_question')
-@requires_auth(['users', 'admin'])
+@app.route('/rate_question', methods=['POST'])
+#@requires_auth(['users', 'admin'])
 def rate_question():
+	print request.data
 	data=json.loads(request.data)
-	record_rating(session['username'],session['rate_q'].qno,data['points'],data['reason'])
-	return ""
+	record_rating(session['username'],session['rate_q'].qno,data['rating'],data['reason'])
+	return "{}"
 
 @app.route('/performance')
 def performance():
@@ -86,7 +89,7 @@ def show_check_weak_question():
 def do_update_weak_questions():
 	data=json.loads(request.data)
 	update_weak_question(data['trues'],data['falses'])
-	return ""
+	return "{}"
 
 @app.route('/make_test')
 def make_test():
