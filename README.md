@@ -77,6 +77,8 @@ the same question twice.
 Database Interaction
 ====================
 
+setupDb.py containst the commands that create the database.
+
 db.py returns a connection to the database.
 
 authentication.py handles database queries required for login and finds the User Type to check if the role of the user 
