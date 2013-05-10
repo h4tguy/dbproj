@@ -43,9 +43,9 @@ def login():
 		clientHash = requestData['hash']
 
 		# User is logged in aleady.
-		if 'username' in session:
-			loggedIn = True
-		elif request.method == 'POST':
+		#if 'username' in session:
+		#	loggedIn = True
+		if request.method == 'POST':
 			# wtf?
 			if 'temp_salt' not in session:
 				abort(500)
@@ -65,6 +65,8 @@ def login():
 			hasher.update(hsh + temphasher.hexdigest())
 
 
+			print hasher.hexdigest()
+			print clientHash
 			if(hasher.hexdigest() != clientHash):
 				loggedIn = False
 			else:
