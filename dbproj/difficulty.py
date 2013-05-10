@@ -1,5 +1,5 @@
 class Difficulty:
-	diffs=['Easy','Medium','Difficulty','Unusable']
+	diffs=['Easy','Average','Hard','Unusable']
 	def get(x):
 		return diffs[x]
 def update_scores():
@@ -41,10 +41,10 @@ def score_questions():
 
 def check_weak_questions():
 	update_scores()
-	cur.execute('''select qno,question, rightanswer,useless from questions where difficulty=3''')
+	cur.execute('''select distinct questions.qno,question, rightanswer,useless from questions LEFT JOIN ratings ON questions.qno = ratings.qno where (difficulty=3 OR ratings.points=1)''')
 	res=cur.fetchall()
 	cur.execute('''select mcqans.qno,letter,answer from questions inner join mcqans
-	on mcqans.qno=questions.qno where difficulty=3''')
+	on mcqans.qno=questions.qno, ratings where difficulty=3 OR (ratings.points = 1 AND ratings.qno = questions.qno)''')
 	anses=cur.fetchall()
 	qs=dict()
 	for i in res:

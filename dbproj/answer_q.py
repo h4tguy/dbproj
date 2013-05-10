@@ -18,8 +18,8 @@ def get_q(username, for_rating=False):
 
 	if for_rating:
 		cur.execute('''select qno, question, rightanswer  from questions where qno not in
-			(select qno from answers where regnum=%s)  and qno not in (select qno from answers
-				where regnum=%s limit 1''',(username,username))
+			(select qno from answers where regnum=%s)  and qno not in (select qno from ratings
+				where regnum=%s) limit 1''',(username,username))
 	else:
 		cur.execute('''select qno, question, rightanswer  from questions where qno not in
 			(select qno from answers where regnum=%s) limit 1''',
