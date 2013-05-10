@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS Questions (
 	Question VARCHAR(100) NOT NULL,
 	RightAnswer VARCHAR(20) NOT NULL,
 	SetBy VARCHAR(9) NOT NULL,
-	Useless BOOLEAN
+	Useless BOOLEAN,
+	Difficulty VARCHAR(8) CONSTRAINT ValidDifficulty CHECK (Difficulty IN ('easy','average','hard','unusable'))
 );
 
 CREATE TABLE IF NOT EXISTS MCQans (
@@ -39,11 +40,6 @@ CREATE TABLE IF NOT EXISTS Ratings (
 	Reason VARCHAR(50),
 
 	PRIMARY KEY( Qno, Regnum )
-);
-
-CREATE TABLE IF NOT EXISTS QuestionDifficulty (
-	Qno INTEGER PRIMARY KEY REFERENCES Questions (Qno),
-	Difficulty VARCHAR(8)
 );'''
 
 db = connect_database()
