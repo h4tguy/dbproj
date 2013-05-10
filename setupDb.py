@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS MCQans (
 );
 
 CREATE TABLE IF NOT EXISTS Answers (
-	Regnum VARCHAR(9) REFERENCES Users (Regnum),
+	Regnum CHAR(9) REFERENCES Users (Regnum),
 	Qno INTEGER REFERENCES Questions (Qno),
 	Answer VARCHAR(20),
 
