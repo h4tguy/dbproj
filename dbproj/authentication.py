@@ -38,6 +38,7 @@ def login():
 	try:
 		loggedIn = False
 		requestData = json.loads(request.data)
+		print requestData
 		regnum = requestData['studentno']
 		clientHash = requestData['hash']
 
@@ -63,17 +64,12 @@ def login():
 			temphasher.update(session['temp_salt'])
 			hasher.update(hsh + temphasher.hexdigest())
 
-			print 'db hash', hsh
-			print 'temp salt hash', temphasher.hexdigest()
-			print 'resultant hash', hasher.hexdigest()
-			print 'client hash', clientHash
-
 
 			if(hasher.hexdigest() != clientHash):
 				loggedIn = False
 			else:
 				loggedIn = True
-				session['username'] = request.form['username']
+				session['username'] = regnum
 				session['user_role'] = user_role
 
 		if loggedIn:
