@@ -1,9 +1,12 @@
 from flask import g
 class Difficulty:
+	#In the questions relation, difficulty is stored as a number from 0 to 3, which represent the following words:
 	diffs=['Easy','Average','Hard','Unusable']
 	def get(x):
 		return diffs[x]
+#Method to set the difficulty for every question
 def update_scores():
+	#Get the average number of times a question was correctly answered for every question. Use this average to determine how hard it is
 	cur = g.db.cursor()
 	cur.execute('select qno from questions')
 	res = cur.fetchall()
@@ -23,6 +26,7 @@ def update_scores():
 		else:
 			difficulty = 3
 
+		#Check if the average rating was 1, in which case the question will be marked unsuable
 		cur.execute('select avg(points) as score from ratings where qno = %s', (question, ))
 		score = cur.fetchone()[0]
 		if score < 2:
@@ -33,7 +37,7 @@ def update_scores():
 
 		g.db.commit()
 
-
+	#Also set any question to unusable if a staff member has flagged it useless
 	cur.execute('''update questions
 	set difficulty=3 where useless''')
 	cur.close()
@@ -41,6 +45,7 @@ def update_scores():
 
 	return True
 
+#Method that gets all the questions and their details to let them be rated
 def score_questions():
 	update_scores()
 	c = g.db.cursor()
@@ -57,15 +62,18 @@ def score_questions():
 		qdict[i[0]][0]=qdict[i[0]][0]+" "+i[1]+") "+i[2]
 	return [[i]+qdict[i] for i in qdict]
 
-
+#Method to get 'weak' questions so that a staff member can examine them and flag some unusable
 def check_weak_questions():
 	update_scores()
 	cur = g.db.cursor()
+	#Get weak questions and their details
 	cur.execute('''select qno,question, rightanswer,useless from questions where difficulty=3''')
 	res=cur.fetchall()
+	#If the questions are MCQs, their answers will also be retrieved for examination
 	cur.execute('''select mcqans.qno,letter,answer from questions inner join mcqans	on mcqans.qno=questions.qno where difficulty=3''')
 	anses=cur.fetchall()
 	qs=dict()
+	#Match MCQ answers with their questions and format everything suitable to return
 	for i in res:
 		qs[i[0]]=i[1:4]
 		qs[i[0]][2]=int(qs[i[0]][2])
@@ -74,6 +82,7 @@ def check_weak_questions():
 	cur.close()
 	return [[i]+qs[i] for i in qdict]
 
+#Method that updates the database to flag the questions the staff member wants flagged as useless
 def update_weak_question(trues, falses):
 	trues=tuple(trues)
 	falses=tuple(falses)
@@ -84,6 +93,7 @@ def update_weak_question(trues, falses):
 	g.db.commit()
 	return True
 
+#Method that generates a test of up to 10 questions that vary in difficulty levels
 def gen_test():
 	cur = g.db.cursor()
 	update_scores()
@@ -93,6 +103,7 @@ def gen_test():
 	qs=qs+cur.fetchall()
 	cur.execute('''select qno, question, rightanswer from questions where difficulty=2 limit 3''')
 	qs=qs+cur.fetchall()
+	#Need to get MCQs answers and match them to the questions
 	qnos=[i[0] for i in qs]
 	cur.execute('''select qno,letter,answer from mcqans
 			where qno in %s order by letter'''%str(tuple(qnos)))
